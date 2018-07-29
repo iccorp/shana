@@ -1,0 +1,29 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "article",
+            "otherEntityName": "article",
+            "otherEntityField": "nom"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "abonne",
+            "otherEntityName": "abonne",
+            "otherEntityField": "pseudo"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "contenu",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180609175204",
+    "entityTableName": "commentaire",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

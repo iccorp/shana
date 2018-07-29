@@ -1,0 +1,64 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="mySectionLabel" jhiTranslate="shanaApp.section.home.createOrEditLabel">Create or edit a Section</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!section.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="section.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="shanaApp.section.titre" for="field_titre">Titre</label>
+            <input type="text" class="form-control" name="titre" id="field_titre"
+                [(ngModel)]="section.titre" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="shanaApp.section.textAvant" for="field_textAvant">Text Avant</label>
+            <input type="text" class="form-control" name="textAvant" id="field_textAvant"
+                [(ngModel)]="section.textAvant" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="shanaApp.section.textApres" for="field_textApres">Text Apres</label>
+            <input type="text" class="form-control" name="textApres" id="field_textApres"
+                [(ngModel)]="section.textApres" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="shanaApp.section.photo" for="field_photo">Photo</label>
+            <div>
+                <img [src]="'data:' + section.photoContentType + ';base64,' + section.photo" style="max-height: 100px;" *ngIf="section.photo" alt="section image"/>
+                <div *ngIf="section.photo" class="form-text text-danger clearfix">
+                    <span class="pull-left">{{section.photoContentType}}, {{byteSize(section.photo)}}</span>
+                    <button type="button" (click)="clearInputImage('photo', 'photoContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
+                <input type="file" id="file_photo" (change)="setFileData($event, section, 'photo', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+            </div>
+            <input type="hidden" class="form-control" name="photo" id="field_photo"
+                [(ngModel)]="section.photo" />
+            <input type="hidden" class="form-control" name="photoContentType" id="field_photoContentType"
+                [(ngModel)]="section.photoContentType" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="shanaApp.section.article" for="field_article">Article</label>
+            <select class="form-control" id="field_article" name="article" [(ngModel)]="section.articleId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="articleOption.id" *ngFor="let articleOption of articles; trackBy: trackArticleById">{{articleOption.nom}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

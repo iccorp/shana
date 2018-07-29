@@ -1,0 +1,33 @@
+{
+    "shanaApp": {
+        "article" : {
+            "home": {
+                "title": "Articles",
+                "createLabel": "Create a new Article",
+                "createOrEditLabel": "Create or edit a Article"
+            },
+            "created": "A new Article is created with identifier {{ param }}",
+            "updated": "A Article is updated with identifier {{ param }}",
+            "deleted": "A Article is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Article {{ id }}?"
+            },
+            "detail": {
+                "title": "Article"
+            },
+            "nom": "Nom",
+            "idPhoto": "Id Photo",
+            "photo": "Photo",
+            "titre": "Titre",
+            "position": "Position",
+            "positionDansCategorie": "Position Dans Categorie",
+            "dateCreation": "Date Creation",
+            "dateDerniereModification": "Date Derniere Modification",
+            "nbVue": "Nb Vue",
+            "nbLike": "Nb Like",
+            "nbPartage": "Nb Partage",
+            "categorie": "Categorie",
+            "section": "Section"
+        }
+    }
+}

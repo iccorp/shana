@@ -1,0 +1,73 @@
+
+<div *ngIf="article">
+    <h2><span jhiTranslate="shanaApp.article.detail.title">Article</span> {{article.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="shanaApp.article.nom">Nom</span></dt>
+        <dd>
+            <span>{{article.nom}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.photo">Photo</span></dt>
+        <dd>
+            <div *ngIf="article.photo">
+                <a (click)="openFile(article.photoContentType, article.photo)">
+                    <img [src]="'data:' + article.photoContentType + ';base64,' + article.photo" style="max-width: 100%;" alt="article image"/>
+                </a>
+                {{article.photoContentType}}, {{byteSize(article.photo)}}
+            </div>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.titre">Titre</span></dt>
+        <dd>
+            <span>{{article.titre}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.position">Position</span></dt>
+        <dd>
+            <span>{{article.position}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.positionDansCategorie">Position Dans Categorie</span></dt>
+        <dd>
+            <span>{{article.positionDansCategorie}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.dateCreation">Date Creation</span></dt>
+        <dd>
+            <span>{{article.dateCreation | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.dateDerniereModification">Date Derniere Modification</span></dt>
+        <dd>
+            <span>{{article.dateDerniereModification | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.nbVue">Nb Vue</span></dt>
+        <dd>
+            <span>{{article.nbVue}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.nbLike">Nb Like</span></dt>
+        <dd>
+            <span>{{article.nbLike}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.nbPartage">Nb Partage</span></dt>
+        <dd>
+            <span>{{article.nbPartage}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.article.categorie">Categorie</span></dt>
+        <dd>
+            <div *ngIf="article.categorieId">
+                <a [routerLink]="['/categorie', article.categorieId]">{{article.categorieNom}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'article/'+ article.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

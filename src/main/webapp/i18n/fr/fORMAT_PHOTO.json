@@ -1,0 +1,10 @@
+{
+    "shanaApp": {
+        "FORMAT_PHOTO" : {
+            "null": "",
+            "COUVERTURE": "COUVERTURE",
+            "CARTE": "CARTE",
+            "VIGNETTE": "VIGNETTE"
+        }
+    }
+}

@@ -1,0 +1,66 @@
+enum FORMAT_PHOTO {
+	COUVERTURE, CARTE, VIGNETTE
+}
+
+entity Photo {
+	idPhoto String,
+    format FORMAT_PHOTO,
+	photo ImageBlob
+}
+
+entity Section {
+    titre String,
+    textAvant String,
+    textApres String,
+    photo ImageBlob,
+}
+entity Article {
+	nom String required,
+	idPhoto String,
+    photo ImageBlob,
+    titre String required,
+    position Integer,
+    positionDansCategorie Integer,
+    dateCreation ZonedDateTime,
+    dateDerniereModification ZonedDateTime,
+    nbVue Integer,
+    nbLike Integer,
+    nbPartage Integer
+}
+
+entity Categorie {
+    nom String required,
+}
+
+entity Abonne {
+    pseudo String required,
+    email String required,
+    motDePasse String required,
+}
+entity Commentaire {
+    contenu String,
+}
+
+
+entity Message {
+    objet String,
+    contenu String required,
+}
+
+relationship ManyToOne {
+	Section {article(nom)} to Article {section},
+	Article {categorie(nom)} to Categorie {article(nom)},
+	Commentaire {article(nom)} to Article,
+    Commentaire {abonne(pseudo)} to Abonne,
+    Message {abonne(pseudo)} to Abonne
+}
+
+// Set pagination options
+paginate * with infinite-scroll
+paginate * with pagination
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+// Set an angular suffix

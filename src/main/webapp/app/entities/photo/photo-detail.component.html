@@ -1,0 +1,39 @@
+
+<div *ngIf="photo">
+    <h2><span jhiTranslate="shanaApp.photo.detail.title">Photo</span> {{photo.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="shanaApp.photo.idPhoto">Id Photo</span></dt>
+        <dd>
+            <span>{{photo.idPhoto}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.photo.format">Format</span></dt>
+        <dd>
+            <span jhiTranslate="{{'shanaApp.FORMAT_PHOTO.' + photo.format}}">{{photo.format}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.photo.photo">Photo</span></dt>
+        <dd>
+            <div *ngIf="photo.photo">
+                <a (click)="openFile(photo.photoContentType, photo.photo)">
+                    <img [src]="'data:' + photo.photoContentType + ';base64,' + photo.photo" style="max-width: 100%;" alt="photo image"/>
+                </a>
+                {{photo.photoContentType}}, {{byteSize(photo.photo)}}
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'photo/'+ photo.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

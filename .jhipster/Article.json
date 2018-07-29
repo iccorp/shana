@@ -1,0 +1,76 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "categorie",
+            "otherEntityName": "categorie",
+            "otherEntityField": "nom"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "section",
+            "otherEntityName": "section",
+            "otherEntityRelationshipName": "article"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "nom",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "idPhoto",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "photo",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
+        },
+        {
+            "fieldName": "titre",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "position",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "positionDansCategorie",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "dateCreation",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "dateDerniereModification",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "nbVue",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "nbLike",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "nbPartage",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20180609175201",
+    "entityTableName": "article",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false
+}

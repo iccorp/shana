@@ -1,0 +1,83 @@
+<div>
+    <h2>
+        <span jhiTranslate="shanaApp.section.home.title">Sections</span>
+        <button class="btn btn-primary float-right jh-create-entity create-section" [routerLink]="['/', { outlets: { popup: ['section-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="shanaApp.section.home.createLabel">
+            Create new Section
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="sections">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="titre"><span jhiTranslate="shanaApp.section.titre">Titre</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="textAvant"><span jhiTranslate="shanaApp.section.textAvant">Text Avant</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="textApres"><span jhiTranslate="shanaApp.section.textApres">Text Apres</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="photo"><span jhiTranslate="shanaApp.section.photo">Photo</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="articleNom"><span jhiTranslate="shanaApp.section.article">Article</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let section of sections ;trackBy: trackId">
+                <td><a [routerLink]="['../section', section.id ]">{{section.id}}</a></td>
+                <td>{{section.titre}}</td>
+                <td>{{section.textAvant}}</td>
+                <td>{{section.textApres}}</td>
+                <td>
+                    <a *ngIf="section.photo" (click)="openFile(section.photoContentType, section.photo)">
+                        <img [src]="'data:' + section.photoContentType + ';base64,' + section.photo" style="max-height: 30px;" alt="section image"/>
+                    </a>
+                    <span *ngIf="section.photo">{{section.photoContentType}}, {{byteSize(section.photo)}}</span>
+                </td>
+                <td>
+                    <div *ngIf="section.articleId">
+                        <a [routerLink]="['../article', section.articleId  ]" >{{section.articleNom}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../section', section.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'section/'+ section.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'section/'+ section.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        <div *ngIf="sections && sections.length">
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
+        </div>
+</div>

@@ -1,0 +1,38 @@
+
+<div *ngIf="commentaire">
+    <h2><span jhiTranslate="shanaApp.commentaire.detail.title">Commentaire</span> {{commentaire.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="shanaApp.commentaire.contenu">Contenu</span></dt>
+        <dd>
+            <span>{{commentaire.contenu}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.commentaire.article">Article</span></dt>
+        <dd>
+            <div *ngIf="commentaire.articleId">
+                <a [routerLink]="['/article', commentaire.articleId]">{{commentaire.articleNom}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.commentaire.abonne">Abonne</span></dt>
+        <dd>
+            <div *ngIf="commentaire.abonneId">
+                <a [routerLink]="['/abonne', commentaire.abonneId]">{{commentaire.abonnePseudo}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'commentaire/'+ commentaire.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

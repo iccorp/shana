@@ -1,0 +1,49 @@
+
+<div *ngIf="section">
+    <h2><span jhiTranslate="shanaApp.section.detail.title">Section</span> {{section.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="shanaApp.section.titre">Titre</span></dt>
+        <dd>
+            <span>{{section.titre}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.section.textAvant">Text Avant</span></dt>
+        <dd>
+            <span>{{section.textAvant}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.section.textApres">Text Apres</span></dt>
+        <dd>
+            <span>{{section.textApres}}</span>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.section.photo">Photo</span></dt>
+        <dd>
+            <div *ngIf="section.photo">
+                <a (click)="openFile(section.photoContentType, section.photo)">
+                    <img [src]="'data:' + section.photoContentType + ';base64,' + section.photo" style="max-width: 100%;" alt="section image"/>
+                </a>
+                {{section.photoContentType}}, {{byteSize(section.photo)}}
+            </div>
+        </dd>
+        <dt><span jhiTranslate="shanaApp.section.article">Article</span></dt>
+        <dd>
+            <div *ngIf="section.articleId">
+                <a [routerLink]="['/article', section.articleId]">{{section.articleNom}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'section/'+ section.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>
