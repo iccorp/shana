@@ -36,6 +36,20 @@ export class PhotoService {
         });
     }
 
+    findByPhoto(photo: Photo): Observable<Photo> {
+        const copy = this.convert(photo);
+        return this.http.post(this.resourceUrl + '/read', copy).map((res: Response) => {
+            const jsonResponse = res.json();
+            return this.convertItemFromServer(jsonResponse);
+        });
+    }
+
+    findAllVignette(): Observable<Array<Photo>> {
+        return this.http.get(this.resourceUrl + '/vignettes').map((res: Response) => {
+            return res.json();
+        });
+    }
+
     query(req?: any): Observable<ResponseWrapper> {
         const options = createRequestOption(req);
         return this.http.get(this.resourceUrl, options)

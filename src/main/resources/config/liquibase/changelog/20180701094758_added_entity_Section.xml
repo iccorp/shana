@@ -34,6 +34,10 @@
                 <constraints nullable="true" />
             </column>
 
+            <column name="id_photo" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
             <column name="photo" type="blob">
                 <constraints nullable="true" />
             </column>

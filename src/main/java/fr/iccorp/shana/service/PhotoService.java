@@ -3,6 +3,7 @@ package fr.iccorp.shana.service;
 import fr.iccorp.shana.domain.enumeration.FORMAT_PHOTO;
 import fr.iccorp.shana.service.dto.PhotoDTO;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -38,6 +39,14 @@ public interface PhotoService {
      * @return the list of entities
      */
     Page<PhotoDTO> findAll(Pageable pageable);
+
+    /**
+     * Get all the photos.
+     *
+     * @return the list of entities
+     * @throws IOException 
+     */
+    List<PhotoDTO> findAll() throws IOException;
 
     /**
      * Get the "id" photo.

@@ -18,6 +18,7 @@
             "titre": "Titre",
             "textAvant": "Text Avant",
             "textApres": "Text Apres",
+            "idPhoto": "Id Photo",
             "photo": "Photo",
             "article": "Article"
         }

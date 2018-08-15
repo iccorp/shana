@@ -16,9 +16,13 @@ public class SectionDTO implements Serializable {
 
     private String titre;
 
+    @Lob
     private String textAvant;
 
+    @Lob
     private String textApres;
+
+    private String idPhoto;
 
     @Lob
     private byte[] photo;
@@ -58,6 +62,14 @@ public class SectionDTO implements Serializable {
 
     public void setTextApres(String textApres) {
         this.textApres = textApres;
+    }
+
+    public String getIdPhoto() {
+        return idPhoto;
+    }
+
+    public void setIdPhoto(String idPhoto) {
+        this.idPhoto = idPhoto;
     }
 
     public byte[] getPhoto() {
@@ -120,6 +132,7 @@ public class SectionDTO implements Serializable {
             ", titre='" + getTitre() + "'" +
             ", textAvant='" + getTextAvant() + "'" +
             ", textApres='" + getTextApres() + "'" +
+            ", idPhoto='" + getIdPhoto() + "'" +
             ", photo='" + getPhoto() + "'" +
             "}";
     }

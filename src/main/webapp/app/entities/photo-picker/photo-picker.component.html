@@ -1,0 +1,65 @@
+<div>
+    <div>{{titre}}</div>
+    <div class="photoContainer">
+        <mat-tab-group dynamicHeight>
+            <mat-tab label=" Photo existante">
+                <div class="photo-existante-content">
+                    <ng-template #noPhotoSelectionne>
+                        <div class="selected-photo-label">Aucune photo sélectionnée</div>
+                    </ng-template>
+                    <ng-template #photoSelectionne>
+                        <div class="selected-photo-label">
+                            <span>Photo sélectionnée</span>
+                            <span class="text-danger clearfix clear-photo">
+                                    <button type="button" 
+                                        (click)="clearInputImage('photo', 'photoContentType', 'file_photo')" 
+                                        class="btn btn-secondary btn-xs">
+                                        <span class="fa fa-times"></span>
+                                    </button>
+                            </span>
+                        </div>
+                        <div class="selected-photo">
+                            <img [src]="'data:' + selectedPhoto.photoContentType + ';base64,' + selectedPhoto.photo" 
+                                class="vignette-selected mat-elevation-z4"
+                                alt="photo image"/>
+                        </div>
+                    </ng-template>
+                    <div *ngIf="selectedPhoto.photo; then photoSelectionne else noPhotoSelectionne"></div>
+                    <mat-card class="vignette-container">
+                        <mat-grid-list cols="5" rowHeight="6:5">
+                            <mat-grid-tile *ngFor="let vignette of vignettes" 
+                                (click)="selectedPhoto = vignette; outputPhoto()">
+                                <img *ngIf="vignette.photo" 
+                                    [src]="'data:' + vignette.photoContentType + ';base64,' + vignette.photo" 
+                                    class="vignette"
+                                    alt="photo image" />
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                    </mat-card>
+                </div>
+            </mat-tab>
+            <mat-tab label="Nouvelle Photo">
+                <div class="nouvelle-photo-content">
+                    <div *ngIf="selectedPhoto.photo; then photoSelectionne else noPhotoSelectionne"></div>
+                    <div class="select-nouvelle-photo">
+                        <input type="file" 
+                            id="file_photo" 
+                            (change)="setFileData($event, selectedPhoto, 'photo', true)" 
+                            accept="image/*" 
+                            jhiTranslate="entity.action.addimage"/>
+                        <input type="hidden" 
+                            class="form-control" 
+                            name="photo" 
+                            id="field_photo" 
+                            [(ngModel)]="selectedPhoto.photo" />
+                        <input type="hidden" 
+                            class="form-control" 
+                            name="photoContentType" 
+                            id="field_photoContentType" 
+                            [(ngModel)]="selectedPhoto.photoContentType"/>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

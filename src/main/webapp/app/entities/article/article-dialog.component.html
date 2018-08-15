@@ -1,12 +1,11 @@
-<div>
 <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
 
-    <div>
+    <div  class="modal-header">
         <h4 class="modal-title" id="myArticleLabel" jhiTranslate="shanaApp.article.home.createOrEditLabel">Create or edit a Article</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 (click)="clear()">&times;</button>
     </div>
-    <div>
+    <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
         <div class="form-group" [hidden]="!article.id">
             <label for="id" jhiTranslate="global.field.id">ID</label>
@@ -14,7 +13,7 @@
                    [(ngModel)]="article.id" readonly />
         </div>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="shanaApp.article.nom" for="field_nom">Nom</label>
+            <label class="form-control-label" jhiTranslate="shanaApp.article.nom" for="field_nom">Nom de l'article</label>
             <input type="text" class="form-control" name="nom" id="field_nom"
                 [(ngModel)]="article.nom" required/>
             <div [hidden]="!(editForm.controls.nom?.dirty && editForm.controls.nom?.invalid)">
@@ -24,33 +23,8 @@
                 </small>
             </div>
         </div>
-        <div>
-            <input type="radio" value="new" name="photoRadio" [(ngModel)]="photoRadio" > Nouvelle Photo
-            <input type="radio" value="existing" name="photoRadio" [(ngModel)]="photoRadio" > Photo existante
-        </div>
-        <div *ngIf="photoRadio === 'new'; then newPhoto else existingPhoto"></div>
-        <ng-template #newPhoto class="form-group">
-            <label class="form-control-label" jhiTranslate="shanaApp.article.photo" for="field_photo">Photo</label>
-            <div>
-                <img *ngIf="article.photo" [src]="'data:' + article.photoContentType + ';base64,' + article.photo" style="max-height: 100px;" alt="article image"/>
-                <div *ngIf="article.photo" class="form-text text-danger clearfix">
-                    <span class="pull-left">{{article.photoContentType}}, {{byteSize(article.photo)}}</span>
-                    <button type="button" (click)="clearInputImage('photo', 'photoContentType', 'fileImage')" class="btn btn-secondary btn-xs pull-right">
-                        <span class="fa fa-times"></span>
-                    </button>
-                </div>
-                <input type="file" id="file_photo" (change)="setFileData($event, article, 'photo', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
-            </div>
-            <input type="hidden" class="form-control" name="photo" id="field_photo"
-                [(ngModel)]="article.photo" />
-            <input type="hidden" class="form-control" name="photoContentType" id="field_photoContentType"
-                [(ngModel)]="article.photoContentType" />
-        </ng-template>
-        <ng-template #existingPhoto>
-            Photo existante
-        </ng-template>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="shanaApp.article.titre" for="field_titre">Titre</label>
+            <label class="form-control-label" jhiTranslate="shanaApp.article.titre" for="field_titre">Titre de</label>
             <input type="text" class="form-control" name="titre" id="field_titre"
                 [(ngModel)]="article.titre" required/>
             <div [hidden]="!(editForm.controls.titre?.dirty && editForm.controls.titre?.invalid)">
@@ -61,14 +35,77 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="form-control-label" jhiTranslate="shanaApp.article.categorie" for="field_categorie">Categorie</label>
+            <select class="form-control" id="field_categorie" name="categorie" [(ngModel)]="article.categorieId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="categorieOption.id" *ngFor="let categorieOption of categories; trackBy: trackCategorieById">{{categorieOption.nom}}</option>
+            </select>
+        </div>
+        <jhi-photo-picker
+            [photoInitiale]="article.photo"
+            [vignettes]="vignettes" 
+            [titre]="'Photo de couverture'"
+            (updatePhoto)="updatePhotoCouverture($event)"></jhi-photo-picker>
+        <div class="form-group">
+            <mat-accordion>
+                <mat-expansion-panel *ngFor="let section of article.sections;index as i">
+                    <mat-expansion-panel-header>
+                    <mat-panel-title>
+                       section {{i+1}}
+                    </mat-panel-title>
+                    <mat-panel-description>
+                        {{section.titre}}
+                    </mat-panel-description>
+                    </mat-expansion-panel-header>
+                
+                    <div>
+                        <label class="form-control-label" for="'section-' + i">Titre</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            for="'section-titre' + i"
+                            [id]="'section-titre' + i"
+                            [name]="'section-titre' + i"
+                            [(ngModel)]="article.sections[i].titre">
+                        <label class="form-control-label spacer-up" for="'section-textAvant' + i">texte 1</label>
+                        <p-editor [(ngModel)]="article.sections[i].textAvant" 
+                            class="section-editor spacer-up"
+                            [style]="{'height':'200px'}"
+                            [id]="'section-textAvant' + i"
+                            [name]="'section-textAvant' + i"></p-editor>
+                        <jhi-photo-picker
+                            [photoInitiale]="article.sections[i].photo"
+                            [vignettes]="vignettes" 
+                            class="form-control spacer-up"
+                            [id]="'section-photo' + i"
+                            [name]="'section-photo' + i"
+                            [titre]="Photo"
+                            (updatePhoto)="updatePhotoSection($event, i)"></jhi-photo-picker>
+                        <label class="form-control-label spacer-up" for="'section-textApres' + i">texte 2</label>
+                        <p-editor [(ngModel)]="article.sections[i].textApres"
+                            class="section-editor"
+                            [style]="{'height':'200px'}"
+                            [id]="'section-textApres' + i"
+                            [name]="'section-textApres' + i"></p-editor>
+                        <button mat-button color="warn" type="button"  (click)="deleteSection(i)">supprimer</button>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <div class="form-group">
+            <div class="button-row">
+                <button  type="button" mat-button color="accent" (click)="addSection()">ajouter une section</button>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="form-control-label" jhiTranslate="shanaApp.article.position" for="field_position">Position</label>
             <input type="number" class="form-control" name="position" id="field_position"
-                [(ngModel)]="article.position" />
+                [(ngModel)]="article.position" min="1"/>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="shanaApp.article.positionDansCategorie" for="field_positionDansCategorie">Position Dans Categorie</label>
             <input type="number" class="form-control" name="positionDansCategorie" id="field_positionDansCategorie"
-                [(ngModel)]="article.positionDansCategorie" />
+                [(ngModel)]="article.positionDansCategorie" min="1"/>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="shanaApp.article.nbVue" for="field_nbVue">Nb Vue</label>
@@ -85,17 +122,9 @@
             <input type="number" class="form-control" name="nbPartage" id="field_nbPartage"
                 [(ngModel)]="article.nbPartage" />
         </div>
-
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="shanaApp.article.categorie" for="field_categorie">Categorie</label>
-            <select class="form-control" id="field_categorie" name="categorie" [(ngModel)]="article.categorieId" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="categorieOption.id" *ngFor="let categorieOption of categories; trackBy: trackCategorieById">{{categorieOption.nom}}</option>
-            </select>
-        </div>
     </div>
-    <div>
-        <button type="button" class="btn btn-secondary" (click)="clear()">
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"  data-dismiss="modal" (click)="clear()">
             <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
@@ -103,4 +132,3 @@
         </button>
     </div>
 </form>
-</div>

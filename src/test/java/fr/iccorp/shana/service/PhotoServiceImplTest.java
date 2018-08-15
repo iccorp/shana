@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableList;
 
 import fr.iccorp.shana.ShanaApp;
 import fr.iccorp.shana.domain.enumeration.FORMAT_PHOTO;
+import fr.iccorp.shana.service.dto.PhotoDTO;
 
 /**
  * Test class for the UserResource REST controller.
@@ -38,9 +39,9 @@ public class PhotoServiceImplTest {
     	URL imgUrl = classLoader.getResource("test.jpg");
     	File file = new File(imgUrl.getFile());
     	byte[] imgIn = IOUtils.toByteArray(new FileInputStream(file));
-    	byte[] img = Base64.getEncoder().encode(imgIn);
-    	photoService.save(img, "image/jpg", 
-        		ImmutableList.of(FORMAT_PHOTO.COUVERTURE, FORMAT_PHOTO.CARTE, FORMAT_PHOTO.VIGNETTE));
-    	System.out.println(img);
+    	PhotoDTO photoDTO = new PhotoDTO();
+    	photoDTO.setPhoto(imgIn);
+    	photoDTO.setPhotoContentType("image/jpg");
+    	photoService.save(photoDTO);
     }
 }

@@ -27,6 +27,15 @@ public class Article implements Serializable {
     @NotNull
     @Column(name = "nom", nullable = false)
     private String nom;
+    
+    @NotNull
+    @Column(name = "titre", nullable = false)
+    private String titre;
+
+    @NotNull
+    @Lob
+    @Column(name = "resume", nullable = false)
+    private String resume;
 
     @Column(name = "id_photo")
     private String idPhoto;
@@ -37,10 +46,6 @@ public class Article implements Serializable {
 
     @Column(name = "photo_content_type")
     private String photoContentType;
-
-    @NotNull
-    @Column(name = "titre", nullable = false)
-    private String titre;
 
     @Column(name = "position")
     private Integer position;
@@ -144,7 +149,15 @@ public class Article implements Serializable {
         this.titre = titre;
     }
 
-    public Integer getPosition() {
+    public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
+	}
+
+	public Integer getPosition() {
         return position;
     }
 
@@ -299,6 +312,7 @@ public class Article implements Serializable {
         return "Article{" +
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
+            ", resume='" + getResume() + "'" +
             ", idPhoto='" + getIdPhoto() + "'" +
             ", photo='" + getPhoto() + "'" +
             ", photoContentType='" + getPhotoContentType() + "'" +

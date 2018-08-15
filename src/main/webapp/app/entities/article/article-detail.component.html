@@ -1,5 +1,13 @@
 
 <div *ngIf="article">
+    <div class="banniere">Shana Cosmetic</div>
+    <div *ngIf="article.photo">
+        <img class="photo-couverture" [src]="'data:' + article.photoContentType + ';base64,' + article.photo" alt="photo de couverture article"/>
+    </div>
+    <div class="nom">{{ article.nom }}</div>
+    <div class="titre">{{ article.titre }}</div>
+    <div class="resume">{{ article.resume }}</div>
+
     <h2><span jhiTranslate="shanaApp.article.detail.title">Article</span> {{article.id}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
@@ -11,8 +19,9 @@
         <dt><span jhiTranslate="shanaApp.article.photo">Photo</span></dt>
         <dd>
             <div *ngIf="article.photo">
+                <div>{{ article.photoContentType }}</div>
                 <a (click)="openFile(article.photoContentType, article.photo)">
-                    <img [src]="'data:' + article.photoContentType + ';base64,' + article.photo" style="max-width: 100%;" alt="article image"/>
+                    <img [src]="'data:' + article.photoContentType + ';base64,' + article.photo" alt="article image"/>
                 </a>
                 {{article.photoContentType}}, {{byteSize(article.photo)}}
             </div>

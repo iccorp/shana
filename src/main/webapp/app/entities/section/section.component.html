@@ -20,6 +20,7 @@
             <th jhiSortBy="titre"><span jhiTranslate="shanaApp.section.titre">Titre</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="textAvant"><span jhiTranslate="shanaApp.section.textAvant">Text Avant</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="textApres"><span jhiTranslate="shanaApp.section.textApres">Text Apres</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="idPhoto"><span jhiTranslate="shanaApp.section.idPhoto">Id Photo</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="photo"><span jhiTranslate="shanaApp.section.photo">Photo</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="articleNom"><span jhiTranslate="shanaApp.section.article">Article</span> <span class="fa fa-sort"></span></th>
             <th></th>
@@ -31,6 +32,7 @@
                 <td>{{section.titre}}</td>
                 <td>{{section.textAvant}}</td>
                 <td>{{section.textApres}}</td>
+                <td>{{section.idPhoto}}</td>
                 <td>
                     <a *ngIf="section.photo" (click)="openFile(section.photoContentType, section.photo)">
                         <img [src]="'data:' + section.photoContentType + ';base64,' + section.photo" style="max-height: 30px;" alt="section image"/>

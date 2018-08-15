@@ -106,10 +106,11 @@ public class ArticleResource {
      *
      * @param id the id of the articleDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the articleDTO, or with status 404 (Not Found)
+     * @throws Exception 
      */
     @GetMapping("/articles/{id}")
     @Timed
-    public ResponseEntity<ArticleDTO> getArticle(@PathVariable Long id) {
+    public ResponseEntity<ArticleDTO> getArticle(@PathVariable Long id) throws Exception {
         log.debug("REST request to get Article : {}", id);
         ArticleDTO articleDTO = articleService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(articleDTO));

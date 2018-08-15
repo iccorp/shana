@@ -1,14 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Rx';
+import { Subscription, Observable } from 'rxjs/Rx';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 
 import { Article } from './article.model';
 import { ArticleService } from './article.service';
+import { PhotoService, Photo, FORMAT_PHOTO } from '../photo';
 
 @Component({
     selector: 'jhi-article-detail',
-    templateUrl: './article-detail.component.html'
+    templateUrl: './article-detail.component.html',
+    styleUrls: ['./article-detail.component.css']
 })
 export class ArticleDetailComponent implements OnInit, OnDestroy {
 
@@ -20,7 +22,8 @@ export class ArticleDetailComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager,
         private dataUtils: JhiDataUtils,
         private articleService: ArticleService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private photoService: PhotoService
     ) {
     }
 
@@ -34,8 +37,23 @@ export class ArticleDetailComponent implements OnInit, OnDestroy {
     load(id) {
         this.articleService.find(id).subscribe((article) => {
             this.article = article;
+            if (this.article.idPhoto) {
+                const photoCouvertureParam = new Photo();
+                photoCouvertureParam.idPhoto = this.article.idPhoto;
+                photoCouvertureParam.format = FORMAT_PHOTO.COUVERTURE;
+                this.loadPhoto(photoCouvertureParam)
+                    .subscribe((photo) => {
+                        this.article.photo = photo.photo;
+                        this.article.photoContentType = photo.photoContentType;
+                    })
+            }
         });
     }
+
+    loadPhoto(photoParam: Photo): Observable<Photo> {
+        return this.photoService.findByPhoto(photoParam);
+    }
+
     byteSize(field) {
         return this.dataUtils.byteSize(field);
     }

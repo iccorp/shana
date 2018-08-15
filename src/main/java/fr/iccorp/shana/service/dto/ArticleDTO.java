@@ -19,14 +19,18 @@ public class ArticleDTO implements Serializable {
     @NotNull
     private String nom;
 
+    @NotNull
+    private String titre;
+
+    @NotNull
+    private String resume;
+    
     private String idPhoto;
 
     @Lob
     private byte[] photo;
     private String photoContentType;
 
-    @NotNull
-    private String titre;
 
     private Integer position;
 
@@ -94,7 +98,15 @@ public class ArticleDTO implements Serializable {
         this.titre = titre;
     }
 
-    public Integer getPosition() {
+    public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
+	}
+
+	public Integer getPosition() {
         return position;
     }
 
@@ -192,6 +204,7 @@ public class ArticleDTO implements Serializable {
         return "ArticleDTO{" +
             "id=" + getId() +
             ", nom='" + getNom() + "'" +
+            ", resume='" + getResume() + "'" +
             ", idPhoto='" + getIdPhoto() + "'" +
             ", photo='" + getPhoto() + "'" +
             ", titre='" + getTitre() + "'" +

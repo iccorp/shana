@@ -22,6 +22,10 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "idPhoto",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "photo",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "image"

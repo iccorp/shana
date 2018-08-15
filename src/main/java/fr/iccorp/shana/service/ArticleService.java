@@ -31,8 +31,9 @@ public interface ArticleService {
      *
      * @param id the id of the entity
      * @return the entity
+     * @throws Exception 
      */
-    ArticleDTO findOne(Long id);
+    ArticleDTO findOne(Long id) throws Exception;
 
     /**
      * Delete the "id" article.

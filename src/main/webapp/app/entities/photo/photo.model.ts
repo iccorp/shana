@@ -3,7 +3,8 @@ import { BaseEntity } from './../../shared';
 export const enum FORMAT_PHOTO {
     'COUVERTURE',
     'CARTE',
-    'VIGNETTE'
+    'VIGNETTE',
+    'SECTION'
 }
 
 export class Photo implements BaseEntity {

@@ -12,6 +12,7 @@ entity Section {
     titre String,
     textAvant String,
     textApres String,
+	idPhoto String,
     photo ImageBlob,
 }
 entity Article {

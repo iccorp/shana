@@ -12,6 +12,10 @@ import { ShanaAccountModule } from './account/account.module';
 import { ShanaEntityModule } from './entities/entity.module';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
 
 // jhipster-needle-angular-add-module-import JHipster will add new module here
 

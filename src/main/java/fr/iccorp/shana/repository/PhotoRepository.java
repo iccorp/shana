@@ -5,6 +5,8 @@ import fr.iccorp.shana.service.dto.PhotoDTO;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.*;
 
 
@@ -14,5 +16,5 @@ import org.springframework.data.jpa.repository.*;
 @SuppressWarnings("unused")
 @Repository
 public interface PhotoRepository extends JpaRepository<Photo, Long> {
-	public PhotoDTO findByIdPhoto(String idPhoto);
+	public Photo findByIdPhoto(String idPhoto);
 }

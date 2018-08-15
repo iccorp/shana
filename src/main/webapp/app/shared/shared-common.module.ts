@@ -10,17 +10,31 @@ import {
     JhiAlertComponent,
     JhiAlertErrorComponent
 } from './';
+import { PhotoPickerComponent } from '../entities/photo-picker/photo-picker.component';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
     imports: [
         ShanaSharedLibsModule,
         EditorModule,
-        SharedModule
+        SharedModule,
+        MatTabsModule,
+        MatGridListModule,
+        MatCardModule,
+        MatButtonModule,
+        MatExpansionModule,
+        MatSelectModule,
     ],
     declarations: [
         FindLanguageFromKeyPipe,
         JhiAlertComponent,
-        JhiAlertErrorComponent
+        JhiAlertErrorComponent,
+        PhotoPickerComponent,
     ],
     providers: [
         JhiLanguageHelper,
@@ -35,7 +49,14 @@ import {
         FindLanguageFromKeyPipe,
         JhiAlertComponent,
         JhiAlertErrorComponent,
-        EditorModule
+        EditorModule,
+        PhotoPickerComponent,
+        MatTabsModule,
+        MatGridListModule,
+        MatCardModule,
+        MatButtonModule,
+        MatExpansionModule,
+        MatSelectModule
     ]
 })
 export class ShanaSharedCommonModule {}

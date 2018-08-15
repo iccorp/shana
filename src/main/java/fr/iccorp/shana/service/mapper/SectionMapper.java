@@ -13,9 +13,11 @@ public interface SectionMapper extends EntityMapper<SectionDTO, Section> {
 
     @Mapping(source = "article.id", target = "articleId")
     @Mapping(source = "article.nom", target = "articleNom")
-    SectionDTO toDto(Section section); 
+    @Mapping(target = "photo", ignore = true)
+    SectionDTO toDto(Section section);
 
     @Mapping(source = "articleId", target = "article")
+    @Mapping(target = "photo", ignore = true)
     Section toEntity(SectionDTO sectionDTO);
 
     default Section fromId(Long id) {

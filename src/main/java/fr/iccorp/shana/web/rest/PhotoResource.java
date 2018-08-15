@@ -1,5 +1,6 @@
 package fr.iccorp.shana.web.rest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -51,7 +52,7 @@ public class PhotoResource {
      *
      * @param photoDTO the photoDTO to create
      * @return the ResponseEntity with status 201 (Created) and with body the new photoDTO, or with status 400 (Bad Request) if the photo has already an ID
-     * @throws Exception 
+     * @throws Exception
      */
     @PostMapping("/photos")
     @Timed
@@ -71,21 +72,21 @@ public class PhotoResource {
      *
      * @param photoDTO the photoDTO to create
      * @return the ResponseEntity with status 201 (Created) and with body the new photoDTO, or with status 400 (Bad Request) if the photo has already an ID
-     * @throws Exception 
+     * @throws Exception
      */
-    @PostMapping("/photos")
+    @PostMapping("/photos/read")
     @Timed
     public ResponseEntity<PhotoDTO> getPhotoByDTO(@RequestBody PhotoDTO photoDTO) throws Exception {
     	log.debug("REST request to save Photo : {}", photoDTO);
     	if (photoDTO.getIdPhoto() == null || photoDTO.getFormat() == null) {
     		throw new BadRequestAlertException("You must specify a format and a correct idPhoto to get a PHOTO", ENTITY_NAME, "format not provided");
     	}
-    	PhotoDTO result = photoService.save(photoDTO);
+    	PhotoDTO result = photoService.getPhotoByDTO(photoDTO);
     	return ResponseEntity.created(new URI("/api/photos/" + result.getId()))
     			.headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
     			.body(result);
     }
-    
+
     /**
      * PUT  /photos : Updates an existing photo.
      *
@@ -93,7 +94,7 @@ public class PhotoResource {
      * @return the ResponseEntity with status 200 (OK) and with body the updated photoDTO,
      * or with status 400 (Bad Request) if the photoDTO is not valid,
      * or with status 500 (Internal Server Error) if the photoDTO couldn't be updated
-     * @throws Exception 
+     * @throws Exception
      */
     @PutMapping("/photos")
     @Timed
@@ -121,6 +122,20 @@ public class PhotoResource {
         Page<PhotoDTO> page = photoService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/photos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /photos : get all the photos.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of photos in body
+     * @throws IOException
+     */
+    @GetMapping("/photos/vignettes")
+    @Timed
+    public ResponseEntity<List<PhotoDTO>> getAllPhotosVignette() throws IOException {
+    	log.debug("REST request to get a page of Photos");
+    	List<PhotoDTO> res = photoService.findAll();
+    	return ResponseUtil.wrapOrNotFound(Optional.ofNullable(res));
     }
 
     /**

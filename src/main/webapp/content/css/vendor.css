@@ -5,4 +5,5 @@
 @import '~quill/dist/quill.snow.css';
 @import '~primeng/resources/themes/omega/theme.css';
 @import '~primeng/resources/primeng.min.css';
-
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import url(https://fonts.googleapis.com/css?family=Tangerine);

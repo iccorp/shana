@@ -44,30 +44,30 @@ export const articleRoute: Routes = [
             pageTitle: 'shanaApp.article.home.title'
         },
         canActivate: [UserRouteAccessService]
-    },
-    {
-        path: 'article-new',
-        component: ArticleDialogComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'shanaApp.article.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-       /*  outlet: 'popup '*/
-    },
-    {
-        path: 'article/:id/edit',
-        component: ArticleDialogComponent,
-        data: {
-            authorities: ['ROLE_USER'],
-            pageTitle: 'shanaApp.article.home.title'
-        },
-        canActivate: [UserRouteAccessService],
-       /*  outlet: 'popup' */
     }
 ];
 
 export const articlePopupRoute: Routes = [
+    {
+        path: 'article-new',
+        component: ArticlePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'shanaApp.article.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    },
+    {
+        path: 'article/:id/edit',
+        component: ArticlePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'shanaApp.article.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    },
     {
         path: 'article/:id/delete',
         component: ArticleDeletePopupComponent,

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -61,6 +62,9 @@ public class PhotoServiceImpl implements PhotoService {
 	@Value("${photo.f-l-h-section}")
 	private Double facteurLHSection;
 
+	@Value("${photo.vignette-width}")
+	private int vignetteWidth;
+
 	public PhotoServiceImpl(PhotoRepository photoRepository, PhotoMapper photoMapper) {
 		this.photoRepository = photoRepository;
 		this.photoMapper = photoMapper;
@@ -88,8 +92,8 @@ public class PhotoServiceImpl implements PhotoService {
 
 		// save the original image
 		String ext = contentType.split("/")[1];
-		byte[] decodedData = Base64.getDecoder().decode(data);
-		Files.write(Paths.get(photoBaseDir + File.separator + idPhoto + "." + ext), decodedData);
+//		byte[] decodedData = Base64.getDecoder().decode(data);
+		Files.write(Paths.get(photoBaseDir + File.separator + idPhoto + "." + ext), data);
 
 		// save data if fs for every format
 		for (FORMAT_PHOTO format : formats) {
@@ -193,7 +197,7 @@ public class PhotoServiceImpl implements PhotoService {
 			x = 0;
 			y = (imgSrcH - h) / 2;
 		}
-		BufferedImage resizedImg = resizeImageWithHint(bimg, x, y, w, h, type);
+		BufferedImage resizedImg = resizeImageVignette(bimg, x, y, w, h, type);
 		File newImg = new File(photoBaseDir + File.separator + FORMAT_PHOTO.VIGNETTE.toString() + File.separator
 				+ idPhoto + "." + ext);
 		newImg.mkdirs();
@@ -225,12 +229,29 @@ public class PhotoServiceImpl implements PhotoService {
 		ImageIO.write(resizedImg, ext, newImg);
 	}
 
-	private static BufferedImage resizeImageWithHint(BufferedImage originalImage, int x, int y, int w, int h,
+	private BufferedImage resizeImageWithHint(BufferedImage originalImage, int x, int y, int w, int h,
 			int type) {
 
 		BufferedImage resizedImage = new BufferedImage(w, h, type);
 		Graphics2D g = resizedImage.createGraphics();
 		g.drawImage(originalImage, 0, 0, w, h, x, y, x + w, y + h, null);
+		g.dispose();
+		g.setComposite(AlphaComposite.Src);
+
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		return resizedImage;
+	}
+
+	private BufferedImage resizeImageVignette(BufferedImage originalImage, int x, int y, int w, int h,
+			int type) {
+
+		int height = (int)(vignetteWidth / facteurLHVignette);
+		BufferedImage resizedImage = new BufferedImage(vignetteWidth, height, type);
+		Graphics2D g = resizedImage.createGraphics();
+		g.drawImage(originalImage, 0, 0, vignetteWidth, height, x, y, x + w, y + h, null);
 		g.dispose();
 		g.setComposite(AlphaComposite.Src);
 
@@ -256,14 +277,13 @@ public class PhotoServiceImpl implements PhotoService {
 		photoDTO.setIdPhoto(idPhoto);
 		Photo photo = photoMapper.toEntity(photoDTO);
 		photo = photoRepository.save(photo);
+		photo.setPhoto(null);
 		return photoMapper.toDto(photo);
 	}
 
 	/**
 	 * Get all the photos.
 	 *
-	 * @param pageable
-	 *            the pagination information
 	 * @return the list of entities
 	 * @throws Exception
 	 */
@@ -271,21 +291,20 @@ public class PhotoServiceImpl implements PhotoService {
 	@Transactional(readOnly = true)
 	public PhotoDTO getPhotoByDTO(PhotoDTO photoDTO) throws Exception {
 		log.debug("Request to get all Photos");
-		PhotoDTO res = photoRepository.findByIdPhoto(photoDTO.getIdPhoto());
+		PhotoDTO res = photoMapper.toDto(photoRepository.findByIdPhoto(photoDTO.getIdPhoto()));
 		if (res == null) {
 			throw new Exception("Photo " + photoDTO.getIdPhoto() + " inconnue !");
 		}
-		byte[] photo = getEncodedPhotoData(photoDTO.getIdPhoto(), photoDTO.getPhotoContentType(), photoDTO.getFormat());
+		byte[] photo = getPhotoData(res.getIdPhoto(), res.getPhotoContentType(), photoDTO.getFormat());
 		res.setPhoto(photo);
+		res.setFormat(photoDTO.getFormat());
 		return res;
 	}
 
-	private byte[] getEncodedPhotoData(String idPhoto, String photoContentType, FORMAT_PHOTO format) throws IOException {
+	private byte[] getPhotoData(String idPhoto, String photoContentType, FORMAT_PHOTO format) throws IOException {
 		String ext = photoContentType.split("/")[1];
-		byte[] data = Files.readAllBytes(
+		return Files.readAllBytes(
 				Paths.get(photoBaseDir + File.separator + format.toString() + File.separator + idPhoto + "." + ext));
-		byte[] encodedData = Base64.getEncoder().encode(data);
-		return encodedData;
 	}
 
 	/**
@@ -300,6 +319,27 @@ public class PhotoServiceImpl implements PhotoService {
 	public Page<PhotoDTO> findAll(Pageable pageable) {
 		log.debug("Request to get all Photos");
 		return photoRepository.findAll(pageable).map(photoMapper::toDto);
+	}
+
+	/**
+	 * Get all the photos.
+	 *
+	 * @return the list of entities
+	 * @throws IOException
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public List<PhotoDTO> findAll() throws IOException {
+		log.debug("Request to get all Photos");
+		List<Photo> photos = photoRepository.findAll();
+		List<PhotoDTO> res = new ArrayList<>();
+		for (Photo photo: photos) {
+			PhotoDTO photoDTO = photoMapper.toDto(photo);
+			photoDTO.setFormat(FORMAT_PHOTO.VIGNETTE);
+			photoDTO.setPhoto(getPhotoData(photoDTO.getIdPhoto(), photoDTO.getPhotoContentType(), FORMAT_PHOTO.VIGNETTE));
+			res.add(photoDTO);
+		}
+		return res;
 	}
 
 	/**

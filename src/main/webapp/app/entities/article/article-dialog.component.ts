@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Response } from '@angular/http';
 
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager, JhiAlertService, JhiDataUtils } from 'ng-jhipster';
 
@@ -12,10 +12,14 @@ import { ArticleService } from './article.service';
 import { Categorie, CategorieService } from '../categorie';
 import { ResponseWrapper } from '../../shared';
 import { DatePipe, Location } from '@angular/common';
+import { PhotoService, Photo, FORMAT_PHOTO } from '../photo';
+import { PhotoPickerComponent } from '../photo-picker/photo-picker.component';
+import { Section, SectionService } from '../section';
 
 @Component({
     selector: 'jhi-article-dialog',
-    templateUrl: './article-dialog.component.html'
+    templateUrl: './article-dialog.component.html',
+    styleUrls: ['./article-dialog.component.css']
 })
 export class ArticleDialogComponent implements OnInit, OnDestroy {
 
@@ -25,6 +29,7 @@ export class ArticleDialogComponent implements OnInit, OnDestroy {
     categories: Categorie[];
     routeSub: any;
     photoRadio = 'new';
+    vignettes: Photo[];
 
     constructor(
         public activeModal: NgbActiveModal,
@@ -37,40 +42,95 @@ export class ArticleDialogComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private datePipe: DatePipe,
         private router: Router,
-        private location: Location
+        private location: Location,
+        private photoService: PhotoService,
+        private sectionService: SectionService
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.categorieService.query()
-            .subscribe((res: ResponseWrapper) => { this.categories = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
-        this.routeSub = this.route.params.subscribe((params) => {
-            const id = params['id'];
-            if ( id ) {
-                this.articleService.find(id).subscribe((article) => {
-                    this.article = article;
-                    article.dateCreation = this.datePipe
-                        .transform(article.dateCreation, 'yyyy-MM-ddTHH:mm:ss');
-                    article.dateDerniereModification = this.datePipe
-                        .transform(article.dateDerniereModification, 'yyyy-MM-ddTHH:mm:ss');
-                    // TODO récupérer la vignette
-                   /*  this.ngbModalRef = this.articleModalRef(component, article);
-                    resolve(this.ngbModalRef); */
-                });
-            } else {
-                this.article = new Article();
-                this.article.nbVue = 0;
-                this.article.nbLike = 0;
-                this.article.nbPartage = 0;
-                this.article.position = 1;
-                this.article.positionDansCategorie = 1;
-            }
-        });
+        this.loadCategories();
+        this.loadVignettesAndSections();
     }
 
-    ngOnDestroy() {
-        this.routeSub.unsubscribe();
+    loadCategories() {
+        this.categorieService.query()
+        .subscribe((res: ResponseWrapper) => { this.categories = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+    }
+
+    loadVignettesAndSections() {
+        this.vignettes = [];
+        this.photoService
+            .findAllVignette()
+            .subscribe((response) => {
+                this.vignettes = response;
+                this.setPhotoCouvertureInitiale();
+                this.loadSections();
+            });
+    }
+
+    setPhotoCouvertureInitiale() {
+        this.vignettes .forEach((vignette) => {
+            if (vignette.idPhoto === this.article.idPhoto) {
+                this.article.photo = vignette;
+            }
+        });
+        if (this.article.photo === undefined) {
+            this.article.photo = new Photo();
+        }
+    }
+
+    loadSections() {
+        this.article.sections = [];
+        if (this.article.id !== undefined) {
+            this.sectionService
+                .findByArticleId(this.article.id)
+                .subscribe((res: ResponseWrapper) => {
+                     this.article.sections = res.json;
+                     this.setPhotoSectionInitiale();
+                });
+        }
+    }
+
+    setPhotoSectionInitiale() {
+        this.article.sections.forEach((s) => {
+            const section = (s as Section);
+            this.vignettes .forEach((vignette) => {
+                if (vignette.idPhoto === section.idPhoto) {
+                    section.photo = vignette;
+                }
+            })
+            if (section.photo === undefined) {
+                section.photo = new Photo();
+            }
+
+        })
+    }
+
+    updatePhotoCouverture(photo: Photo) {
+        this.article.photo = photo;
+        this.article.idPhoto = photo.idPhoto;
+    }
+
+    updatePhotoSection(photo: Photo, i: number) {
+        (this.article.sections[i] as Section).photo = photo;
+        (this.article.sections[i] as Section).idPhoto = photo.idPhoto;
+    }
+
+    ngOnDestroy() {}
+
+    addSection() {
+        if (!this.article.sections) {
+            this.article.sections = [];
+        }
+        const section: Section = new Section();
+        section.photo = new Photo();
+        this.article.sections.push(section);
+    }
+
+    deleteSection(i: number) {
+        this.article.sections.splice(i, 1);
     }
 
     byteSize(field) {
@@ -90,30 +150,78 @@ export class ArticleDialogComponent implements OnInit, OnDestroy {
     }
 
     clear() {
-        this.location.back();
+        this.activeModal.dismiss('cancel');
     }
 
     save() {
         this.isSaving = true;
-        if (this.article.id !== undefined) {
+        const photoCouverture: Photo = (this.article.photo as Photo);
+        if (photoCouverture && photoCouverture.photo && !photoCouverture.idPhoto) {
+            this.photoService
+            .create(photoCouverture)
+            .subscribe((savedPhoto: Photo) => {
+                this.article.idPhoto = savedPhoto.idPhoto;
+                this.article.photo = null;
+                this.saveArticle();
+            });
+        } else {
+            this.article.photo = null;
+            this.saveArticle();
+        }
+    }
+
+    saveArticle() {
+        if (this.article.id) {
             this.subscribeToSaveResponse(
                 this.articleService.update(this.article));
         } else {
             this.subscribeToSaveResponse(
                 this.articleService.create(this.article));
         }
-        this.router.navigateByUrl('article');
     }
-
     private subscribeToSaveResponse(result: Observable<Article>) {
         result.subscribe((res: Article) =>
             this.onSaveSuccess(res), (res: Response) => this.onSaveError());
     }
 
     private onSaveSuccess(result: Article) {
+        console.log('article sauvegardée: ' + JSON.stringify(result));
+        this.article.sections.forEach((section: Section) => {
+            console.log('section_' + this.article.sections.indexOf(section));
+            section.articleId = result.id;
+            const photoSection: Photo = (section.photo as Photo);
+            if (photoSection && photoSection.photo && !photoSection.idPhoto) {
+                this.photoService
+                    .create(photoSection)
+                    .subscribe((savedPhoto: Photo) => {
+                        section.idPhoto = savedPhoto.idPhoto;
+                        section.photo = null;
+                        this.createOrUpdateSection(section);
+                    });
+            } else {
+                section.photo = null;
+                this.createOrUpdateSection(section);
+            }
+        });
         this.eventManager.broadcast({ name: 'articleListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
+    }
+
+    createOrUpdateSection(section: Section) {
+        if (section.id) {
+            console.log('update Section')
+            this.subscribeToSavedSection(this.sectionService.update(section));
+        } else {
+            console.log('create Section')
+            this.subscribeToSavedSection(this.sectionService.create(section));
+        }
+    }
+
+    subscribeToSavedSection(result: Observable<Section>) {
+        result.subscribe((savedSection) => {
+            console.log('Saved section: ' + JSON.stringify(savedSection));
+        })
     }
 
     private onSaveError() {

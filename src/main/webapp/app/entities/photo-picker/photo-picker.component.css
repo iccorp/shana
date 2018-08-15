@@ -1,0 +1,48 @@
+.photoContainer {
+   margin-bottom: 20px;
+}
+.vignette, {
+    max-width: 200px;
+}
+.vignette-selected {
+    max-width: 200px;
+    width: 100%;
+}
+.example-small-box, .example-large-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 16px;
+    padding: 16px;
+    border-radius: 8px;
+}
+  
+.example-small-box {
+    height: 100px;
+    width: 100px;
+}
+  
+.example-large-box {
+    height: 300px;
+    width: 300px;
+}
+
+.nouvelle-photo-content, .photo-existante-content {
+    padding: 5px;
+    margin-top: 20px;
+}
+  
+.selected-photo-label, .selected-photo {
+    padding-top: 10px;
+    padding-bottom: 10px
+}
+
+.clear-photo {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.vignette-container {
+    max-height: 400px;
+    overflow: auto;
+}

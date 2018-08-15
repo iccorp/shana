@@ -1,12 +1,10 @@
 package fr.iccorp.shana.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import fr.iccorp.shana.service.SectionService;
-import fr.iccorp.shana.web.rest.errors.BadRequestAlertException;
-import fr.iccorp.shana.web.rest.util.HeaderUtil;
-import fr.iccorp.shana.web.rest.util.PaginationUtil;
-import fr.iccorp.shana.service.dto.SectionDTO;
-import io.github.jhipster.web.util.ResponseUtil;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,13 +12,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import com.codahale.metrics.annotation.Timed;
 
-import java.util.List;
-import java.util.Optional;
+import fr.iccorp.shana.service.SectionService;
+import fr.iccorp.shana.service.dto.SectionDTO;
+import fr.iccorp.shana.web.rest.errors.BadRequestAlertException;
+import fr.iccorp.shana.web.rest.util.HeaderUtil;
+import fr.iccorp.shana.web.rest.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing Section.
@@ -40,11 +48,15 @@ public class SectionResource {
     }
 
     /**
-     * POST  /sections : Create a new section.
+     * POST /sections : Create a new section.
      *
-     * @param sectionDTO the sectionDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new sectionDTO, or with status 400 (Bad Request) if the section has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @param sectionDTO
+     *            the sectionDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new
+     *         sectionDTO, or with status 400 (Bad Request) if the section has
+     *         already an ID
+     * @throws URISyntaxException
+     *             if the Location URI syntax is incorrect
      */
     @PostMapping("/sections")
     @Timed
@@ -55,18 +67,20 @@ public class SectionResource {
         }
         SectionDTO result = sectionService.save(sectionDTO);
         return ResponseEntity.created(new URI("/api/sections/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString())).body(result);
     }
 
     /**
-     * PUT  /sections : Updates an existing section.
+     * PUT /sections : Updates an existing section.
      *
-     * @param sectionDTO the sectionDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated sectionDTO,
-     * or with status 400 (Bad Request) if the sectionDTO is not valid,
-     * or with status 500 (Internal Server Error) if the sectionDTO couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @param sectionDTO
+     *            the sectionDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated
+     *         sectionDTO, or with status 400 (Bad Request) if the sectionDTO is not
+     *         valid, or with status 500 (Internal Server Error) if the sectionDTO
+     *         couldn't be updated
+     * @throws URISyntaxException
+     *             if the Location URI syntax is incorrect
      */
     @PutMapping("/sections")
     @Timed
@@ -77,15 +91,16 @@ public class SectionResource {
         }
         SectionDTO result = sectionService.save(sectionDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, sectionDTO.getId().toString()))
-            .body(result);
+                .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, sectionDTO.getId().toString())).body(result);
     }
 
     /**
-     * GET  /sections : get all the sections.
+     * GET /sections : get all the sections.
      *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of sections in body
+     * @param pageable
+     *            the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of sections in
+     *         body
      */
     @GetMapping("/sections")
     @Timed
@@ -97,10 +112,12 @@ public class SectionResource {
     }
 
     /**
-     * GET  /sections/:id : get the "id" section.
+     * GET /sections/:id : get the "id" section.
      *
-     * @param id the id of the sectionDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the sectionDTO, or with status 404 (Not Found)
+     * @param id
+     *            the id of the sectionDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the sectionDTO,
+     *         or with status 404 (Not Found)
      */
     @GetMapping("/sections/{id}")
     @Timed
@@ -111,9 +128,26 @@ public class SectionResource {
     }
 
     /**
-     * DELETE  /sections/:id : delete the "id" section.
+     * GET /sections/:id : get the "id" section.
      *
-     * @param id the id of the sectionDTO to delete
+     * @param id
+     *            the id of the sectionDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the sectionDTO,
+     *         or with status 404 (Not Found)
+     */
+    @GetMapping("/sections/article/{id}")
+    @Timed
+    public ResponseEntity<List<SectionDTO>> getSectionByIdArticle(@PathVariable Long id) {
+        log.debug("REST request to get Section : {}", id);
+        List<SectionDTO> sections = sectionService.findByArticleId(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(sections));
+    }
+
+    /**
+     * DELETE /sections/:id : delete the "id" section.
+     *
+     * @param id
+     *            the id of the sectionDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/sections/{id}")

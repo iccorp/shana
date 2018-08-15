@@ -51,6 +51,9 @@ public class SectionResourceIntTest {
     private static final String DEFAULT_TEXT_APRES = "AAAAAAAAAA";
     private static final String UPDATED_TEXT_APRES = "BBBBBBBBBB";
 
+    private static final String DEFAULT_ID_PHOTO = "AAAAAAAAAA";
+    private static final String UPDATED_ID_PHOTO = "BBBBBBBBBB";
+
     private static final byte[] DEFAULT_PHOTO = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_PHOTO = TestUtil.createByteArray(2, "1");
     private static final String DEFAULT_PHOTO_CONTENT_TYPE = "image/jpg";
@@ -103,6 +106,7 @@ public class SectionResourceIntTest {
             .titre(DEFAULT_TITRE)
             .textAvant(DEFAULT_TEXT_AVANT)
             .textApres(DEFAULT_TEXT_APRES)
+            .idPhoto(DEFAULT_ID_PHOTO)
             .photo(DEFAULT_PHOTO)
             .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE);
         return section;
@@ -132,6 +136,7 @@ public class SectionResourceIntTest {
         assertThat(testSection.getTitre()).isEqualTo(DEFAULT_TITRE);
         assertThat(testSection.getTextAvant()).isEqualTo(DEFAULT_TEXT_AVANT);
         assertThat(testSection.getTextApres()).isEqualTo(DEFAULT_TEXT_APRES);
+        assertThat(testSection.getIdPhoto()).isEqualTo(DEFAULT_ID_PHOTO);
         assertThat(testSection.getPhoto()).isEqualTo(DEFAULT_PHOTO);
         assertThat(testSection.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
     }
@@ -170,6 +175,7 @@ public class SectionResourceIntTest {
             .andExpect(jsonPath("$.[*].titre").value(hasItem(DEFAULT_TITRE.toString())))
             .andExpect(jsonPath("$.[*].textAvant").value(hasItem(DEFAULT_TEXT_AVANT.toString())))
             .andExpect(jsonPath("$.[*].textApres").value(hasItem(DEFAULT_TEXT_APRES.toString())))
+            .andExpect(jsonPath("$.[*].idPhoto").value(hasItem(DEFAULT_ID_PHOTO.toString())))
             .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))));
     }
@@ -188,6 +194,7 @@ public class SectionResourceIntTest {
             .andExpect(jsonPath("$.titre").value(DEFAULT_TITRE.toString()))
             .andExpect(jsonPath("$.textAvant").value(DEFAULT_TEXT_AVANT.toString()))
             .andExpect(jsonPath("$.textApres").value(DEFAULT_TEXT_APRES.toString()))
+            .andExpect(jsonPath("$.idPhoto").value(DEFAULT_ID_PHOTO.toString()))
             .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
             .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)));
     }
@@ -215,6 +222,7 @@ public class SectionResourceIntTest {
             .titre(UPDATED_TITRE)
             .textAvant(UPDATED_TEXT_AVANT)
             .textApres(UPDATED_TEXT_APRES)
+            .idPhoto(UPDATED_ID_PHOTO)
             .photo(UPDATED_PHOTO)
             .photoContentType(UPDATED_PHOTO_CONTENT_TYPE);
         SectionDTO sectionDTO = sectionMapper.toDto(updatedSection);
@@ -231,6 +239,7 @@ public class SectionResourceIntTest {
         assertThat(testSection.getTitre()).isEqualTo(UPDATED_TITRE);
         assertThat(testSection.getTextAvant()).isEqualTo(UPDATED_TEXT_AVANT);
         assertThat(testSection.getTextApres()).isEqualTo(UPDATED_TEXT_APRES);
+        assertThat(testSection.getIdPhoto()).isEqualTo(UPDATED_ID_PHOTO);
         assertThat(testSection.getPhoto()).isEqualTo(UPDATED_PHOTO);
         assertThat(testSection.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
     }

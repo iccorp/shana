@@ -22,11 +22,16 @@ public class Section implements Serializable {
     @Column(name = "titre")
     private String titre;
 
+    @Lob
     @Column(name = "text_avant")
     private String textAvant;
 
+    @Lob
     @Column(name = "text_apres")
     private String textApres;
+
+    @Column(name = "id_photo")
+    private String idPhoto;
 
     @Lob
     @Column(name = "photo")
@@ -84,6 +89,19 @@ public class Section implements Serializable {
 
     public void setTextApres(String textApres) {
         this.textApres = textApres;
+    }
+
+    public String getIdPhoto() {
+        return idPhoto;
+    }
+
+    public Section idPhoto(String idPhoto) {
+        this.idPhoto = idPhoto;
+        return this;
+    }
+
+    public void setIdPhoto(String idPhoto) {
+        this.idPhoto = idPhoto;
     }
 
     public byte[] getPhoto() {
@@ -153,6 +171,7 @@ public class Section implements Serializable {
             ", titre='" + getTitre() + "'" +
             ", textAvant='" + getTextAvant() + "'" +
             ", textApres='" + getTextApres() + "'" +
+            ", idPhoto='" + getIdPhoto() + "'" +
             ", photo='" + getPhoto() + "'" +
             ", photoContentType='" + getPhotoContentType() + "'" +
             "}";

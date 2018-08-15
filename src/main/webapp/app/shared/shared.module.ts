@@ -21,12 +21,12 @@ import {
 @NgModule({
     imports: [
         ShanaSharedLibsModule,
-        ShanaSharedCommonModule
+        ShanaSharedCommonModule,
     ],
     declarations: [
         JhiSocialComponent,
         JhiLoginModalComponent,
-        HasAnyAuthorityDirective
+        HasAnyAuthorityDirective,
     ],
     providers: [
         LoginService,
@@ -46,7 +46,7 @@ import {
         JhiSocialComponent,
         JhiLoginModalComponent,
         HasAnyAuthorityDirective,
-        DatePipe
+        DatePipe,
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
