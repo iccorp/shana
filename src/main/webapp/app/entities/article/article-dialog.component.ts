@@ -88,23 +88,27 @@ export class ArticleDialogComponent implements OnInit, OnDestroy {
                 .findByArticleId(this.article.id)
                 .subscribe((res: ResponseWrapper) => {
                      this.article.sections = res.json;
-                     this.setPhotoSectionInitiale();
+                     this.setPhotoOuVideoSectionInitiale();
                 });
         }
     }
 
-    setPhotoSectionInitiale() {
+    setPhotoOuVideoSectionInitiale() {
         this.article.sections.forEach((s) => {
             const section = (s as Section);
-            this.vignettes .forEach((vignette) => {
-                if (vignette.idPhoto === section.idPhoto) {
-                    section.photo = vignette;
+            if (section.idVideo) {
+                section.photo = new Photo().photo;
+            } else {
+                section.idVideo = '';
+                this.vignettes .forEach((vignette) => {
+                    if (vignette.idPhoto === section.idPhoto) {
+                        section.photo = vignette;
+                    }
+                })
+                if (section.photo === undefined) {
+                    section.photo = new Photo();
                 }
-            })
-            if (section.photo === undefined) {
-                section.photo = new Photo();
             }
-
         })
     }
 
@@ -116,6 +120,14 @@ export class ArticleDialogComponent implements OnInit, OnDestroy {
     updatePhotoSection(photo: Photo, i: number) {
         (this.article.sections[i] as Section).photo = photo;
         (this.article.sections[i] as Section).idPhoto = photo.idPhoto;
+        (this.article.sections[i] as Section).idVideo = null;
+    }
+
+    updateVideoSection(idVideo: string, i: number) {
+        console.log('article-section receiving video id: ' + idVideo);
+        (this.article.sections[i] as Section).idVideo = idVideo;
+        (this.article.sections[i] as Section).photo = null;
+        (this.article.sections[i] as Section).idPhoto = null;
     }
 
     ngOnDestroy() {}
@@ -185,12 +197,17 @@ export class ArticleDialogComponent implements OnInit, OnDestroy {
     }
 
     private onSaveSuccess(result: Article) {
+        console.log('article avec: ' + this.article.sections.length + ' sections!');
         console.log('article sauvegardée: ' + JSON.stringify(result));
         this.article.sections.forEach((section: Section) => {
-            console.log('section_' + this.article.sections.indexOf(section));
+            console.log('section_' + this.article.sections.indexOf(section) + ': ' + JSON.stringify(section));
             section.articleId = result.id;
             const photoSection: Photo = (section.photo as Photo);
-            if (photoSection && photoSection.photo && !photoSection.idPhoto) {
+            if (section.idVideo) {
+                section.idPhoto = null;
+                section.photo = null;
+                this.createOrUpdateSection(section);
+            } else if (photoSection && photoSection.photo && !photoSection.idPhoto) {
                 this.photoService
                     .create(photoSection)
                     .subscribe((savedPhoto: Photo) => {

@@ -1,3 +1,63 @@
+<div class="banniere">Shana Cosmetics</div>
+<div *ngIf="photoCouverture" class="spacer-up spacer-down">
+    <img class="photo-couverture" [src]="'data:' + photoCouverture.photoContentType + ';base64,' + photoCouverture.photo"
+        alt="photo de couverture" />
+</div>
+<div class="categorie-container">
+    <span class="categorie-item" *ngFor="let categorie of categories">{{ categorie.nom | uppercase }}</span>
+</div>
+<p-dataScroller [value]="articles" [rows]="2">
+    <ng-template let-article let-e="index" pTemplate="item">
+        <div *ngIf="isDesktop(); then desktop else mobile"></div>
+        <ng-template #desktop>
+            <div class="ui-g">
+                <div class="ui-sm-12 ui-md-10 ui-md-offset-2 ui-lg-10 ui-lg-offset-2 ui-g-nopad">
+                    <div class="ui-g">
+                        <div class="ui-sm-12 ui-md-6 ui-lg-5 ui-g-nopad">
+                            <div *ngIf="e%2===0; then articleImg else articleDesc"></div>
+                        </div>
+                        <div class="ui-sm-12 ui-md-5 ui-lg-5  ui-g-nopad">
+                            <div *ngIf="e%2===0; then articleDesc else articleImg"></div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #mobile>
+            <div class="ui-g">
+                <div class="ui-sm-12 ui-md-10 ui-md-offset-2 ui-lg-10 ui-lg-offset-2 ui-g-nopad">
+                    <div class="ui-g">
+                        <div class="ui-sm-12 ui-md-6 ui-lg-5 ui-g-nopad">
+                            <ng-container *ngTemplateOutlet="articleImg"></ng-container>
+                        </div>
+                        <div class="ui-sm-12 ui-md-5 ui-lg-5  ui-g-nopad">
+                            <ng-container *ngTemplateOutlet="articleDesc"></ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #articleImg>
+            <div class="article-card">
+                <img *ngIf="article.photo" 
+                class="article-image" 
+                [src]="'data:' + article.photoContentType + ';base64,' + article.photo"
+                alt="photo de l'article" />
+            </div>
+            </ng-template>
+            <ng-template #articleDesc>
+                <div class="article-card article-desc-center">
+                    <div *ngIf="article.nom" class="nom-desc">{{ article.nom | uppercase}}</div>
+                    <div *ngIf="article.titre" class="article-desc">{{ article.titre }}</div>
+                    <div *ngIf="article.resume" class="resume-desc">{{ article.resume }}</div>
+                </div>
+                </ng-template>
+    </ng-template>
+</p-dataScroller>
+
+
+
+
 <div class="row">
     <div class="col-md-3">
         <span class="hipster img-fluid rounded"></span>
@@ -8,17 +68,20 @@
 
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
-                <span *ngIf="account" jhiTranslate="home.logged.message"
-                    translateValues="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
+                <span *ngIf="account" jhiTranslate="home.logged.message" translateValues="{username: '{{account.login}}'}">
+                    You are logged in as user "{{account.login}}". </span>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span jhiTranslate="global.messages.info.authenticated.prefix">If you want to </span>
-                <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><span jhiTranslate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").</span>
+                <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a><span
+                    jhiTranslate="global.messages.info.authenticated.suffix">, you can try the default accounts:<br />-
+                    Administrator (login="admin" and password="admin") <br />- User (login="user" and password="user").</span>
             </div>
             <div class="alert alert-warning" *ngSwitchCase="false">
                 <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
-                <a class="alert-link" routerLink="register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
+                <a class="alert-link" routerLink="register" jhiTranslate="global.messages.info.register.link">Register
+                    a new account</a>
             </div>
         </div>
 
@@ -27,15 +90,21 @@
         </p>
 
         <ul>
-            <li><a href="http://www.jhipster.tech/" target="_blank" rel="noopener" jhiTranslate="home.link.homepage">JHipster homepage</a></li>
-            <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener" jhiTranslate="home.link.stackoverflow">JHipster on Stack Overflow</a></li>
-            <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener" jhiTranslate="home.link.bugtracker">JHipster bug tracker</a></li>
-            <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener" jhiTranslate="home.link.chat">JHipster public chat room</a></li>
-            <li><a href="https://twitter.com/java_hipster" target="_blank" rel="noopener" jhiTranslate="home.link.follow">follow @java_hipster on Twitter</a></li>
+            <li><a href="http://www.jhipster.tech/" target="_blank" rel="noopener" jhiTranslate="home.link.homepage">JHipster
+                    homepage</a></li>
+            <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" rel="noopener" jhiTranslate="home.link.stackoverflow">JHipster
+                    on Stack Overflow</a></li>
+            <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" rel="noopener"
+                    jhiTranslate="home.link.bugtracker">JHipster bug tracker</a></li>
+            <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener" jhiTranslate="home.link.chat">JHipster
+                    public chat room</a></li>
+            <li><a href="https://twitter.com/java_hipster" target="_blank" rel="noopener" jhiTranslate="home.link.follow">follow
+                    @java_hipster on Twitter</a></li>
         </ul>
 
         <p>
-            <span jhiTranslate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener" jhiTranslate="home.github">GitHub</a>!
+            <span jhiTranslate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/jhipster/generator-jhipster"
+                target="_blank" rel="noopener" jhiTranslate="home.github">GitHub</a>!
         </p>
     </div>
 </div>

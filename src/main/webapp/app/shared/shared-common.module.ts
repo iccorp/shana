@@ -17,6 +17,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatSelectModule} from '@angular/material/select';
+import {DataScrollerModule} from 'primeng/datascroller';
+import { DeviceDetectorModule } from 'ngx-device-detector';
 
 @NgModule({
     imports: [
@@ -29,6 +31,8 @@ import {MatSelectModule} from '@angular/material/select';
         MatButtonModule,
         MatExpansionModule,
         MatSelectModule,
+        DataScrollerModule,
+        DeviceDetectorModule.forRoot()
     ],
     declarations: [
         FindLanguageFromKeyPipe,
@@ -50,13 +54,15 @@ import {MatSelectModule} from '@angular/material/select';
         JhiAlertComponent,
         JhiAlertErrorComponent,
         EditorModule,
+        DataScrollerModule,
         PhotoPickerComponent,
         MatTabsModule,
         MatGridListModule,
         MatCardModule,
         MatButtonModule,
         MatExpansionModule,
-        MatSelectModule
+        MatSelectModule,
+        DeviceDetectorModule
     ]
 })
 export class ShanaSharedCommonModule {}

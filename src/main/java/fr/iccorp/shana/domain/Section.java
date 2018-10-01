@@ -33,6 +33,9 @@ public class Section implements Serializable {
     @Column(name = "id_photo")
     private String idPhoto;
 
+    @Column(name = "id_video")
+    private String idVideo;
+    
     @Lob
     @Column(name = "photo")
     private byte[] photo;
@@ -103,8 +106,17 @@ public class Section implements Serializable {
     public void setIdPhoto(String idPhoto) {
         this.idPhoto = idPhoto;
     }
+    
 
-    public byte[] getPhoto() {
+    public String getIdVideo() {
+		return idVideo;
+	}
+
+	public void setIdVideo(String idVideo) {
+		this.idVideo = idVideo;
+	}
+
+	public byte[] getPhoto() {
         return photo;
     }
 
@@ -172,6 +184,7 @@ public class Section implements Serializable {
             ", textAvant='" + getTextAvant() + "'" +
             ", textApres='" + getTextApres() + "'" +
             ", idPhoto='" + getIdPhoto() + "'" +
+            ", idVideo='" + getIdVideo() + "'" +
             ", photo='" + getPhoto() + "'" +
             ", photoContentType='" + getPhotoContentType() + "'" +
             "}";

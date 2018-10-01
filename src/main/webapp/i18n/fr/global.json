@@ -28,6 +28,7 @@
             "admin": {
                 "main": "Administration",
                 "userManagement": "Gestion des utilisateurs",
+                "settings": "Paramètres",
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "health": "Diagnostics",

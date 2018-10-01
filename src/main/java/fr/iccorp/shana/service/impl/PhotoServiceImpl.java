@@ -19,6 +19,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -273,6 +274,10 @@ public class PhotoServiceImpl implements PhotoService {
 	@Override
 	public PhotoDTO save(PhotoDTO photoDTO) throws Exception {
 		log.debug("Request to save Photo : {}", photoDTO);
+		if (StringUtils.isEmpty(photoDTO.getPhotoContentType())) {
+			log.warn("PhotoContentType not provided: default value set image/jpg");
+			photoDTO.setPhotoContentType("image/jpg");
+		}
 		String idPhoto = saveInAllFormats(photoDTO.getPhoto(), photoDTO.getPhotoContentType());
 		photoDTO.setIdPhoto(idPhoto);
 		Photo photo = photoMapper.toEntity(photoDTO);

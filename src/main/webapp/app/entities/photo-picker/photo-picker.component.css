@@ -1,3 +1,6 @@
+.spacer-up {
+    margin-top: 20px;
+}
 .photoContainer {
    margin-bottom: 20px;
 }
@@ -45,4 +48,8 @@
 .vignette-container {
     max-height: 400px;
     overflow: auto;
+}
+.vigetteVideo {
+    width: 200px;
+    height: 150px;
 }

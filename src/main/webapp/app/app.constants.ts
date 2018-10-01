@@ -10,3 +10,7 @@ let _SERVER_API_URL = ''; // This value will be overwritten by Webpack
 export const VERSION = _VERSION;
 export const DEBUG_INFO_ENABLED = _DEBUG_INFO_ENABLED;
 export const SERVER_API_URL = _SERVER_API_URL;
+// perso
+export const BASE_LINK_YOUTUBE = 'https://www.youtube.com/watch?v=';
+export const BASE_LINK_YOUTUBE_EMBED = 'https://www.youtube.com/embed/';
+export const BASE_LINK_YOUTUBE_VI = 'https://img.youtube.com/vi/';

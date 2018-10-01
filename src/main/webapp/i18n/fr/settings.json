@@ -1,4 +1,10 @@
 {
+    "shanaApp": {
+        "settings": {
+            "updated": "Le paramètre  {{ param }} a été mis à jour",
+            "title": "Paramètres"
+        }
+    },
     "settings": {
         "title": "Profil de l'utilisateur [<b>{{username}}</b>]",
         "form": {

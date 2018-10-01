@@ -24,12 +24,23 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="shanaApp.article.titre" for="field_titre">Titre de</label>
+            <label class="form-control-label" jhiTranslate="shanaApp.article.titre" for="field_titre">Titre</label>
             <input type="text" class="form-control" name="titre" id="field_titre"
                 [(ngModel)]="article.titre" required/>
             <div [hidden]="!(editForm.controls.titre?.dirty && editForm.controls.titre?.invalid)">
                 <small class="form-text text-danger"
                    [hidden]="!editForm.controls.titre?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="shanaApp.article.resume" for="field_resume">Résumé</label>
+            <input type="text" class="form-control" name="resume" id="field_resume"
+                [(ngModel)]="article.resume" required/>
+            <div [hidden]="!(editForm.controls.resume?.dirty && editForm.controls.resume?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.resume?.errors?.required" jhiTranslate="entity.validation.required">
                    This field is required.
                 </small>
             </div>
@@ -45,6 +56,8 @@
             [photoInitiale]="article.photo"
             [vignettes]="vignettes" 
             [titre]="'Photo de couverture'"
+            [activateVideoPicker]="false"
+            [videoId]="''"
             (updatePhoto)="updatePhotoCouverture($event)"></jhi-photo-picker>
         <div class="form-group">
             <mat-accordion>
@@ -80,6 +93,9 @@
                             [id]="'section-photo' + i"
                             [name]="'section-photo' + i"
                             [titre]="Photo"
+                            [activateVideoPicker]="true"
+                            [idVideo]="article.sections[i].idVideo"
+                            (updateVideo)="updateVideoSection($event, i)"
                             (updatePhoto)="updatePhotoSection($event, i)"></jhi-photo-picker>
                         <label class="form-control-label spacer-up" for="'section-textApres' + i">texte 2</label>
                         <p-editor [(ngModel)]="article.sections[i].textApres"

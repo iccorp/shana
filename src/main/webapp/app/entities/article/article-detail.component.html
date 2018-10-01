@@ -1,12 +1,32 @@
 
 <div *ngIf="article">
-    <div class="banniere">Shana Cosmetic</div>
-    <div *ngIf="article.photo">
+    <div class="banniere">Shana Cosmetics</div>
+   <!--  <div class="categorie-container">
+        <span class="categorie-item" *ngFor="let categorie of categories">{{ categorie.nom | uppercase }}</span>
+    </div> -->
+    <div *ngIf="article.photo" class="spacer-up spacer-down">
         <img class="photo-couverture" [src]="'data:' + article.photoContentType + ';base64,' + article.photo" alt="photo de couverture article"/>
     </div>
-    <div class="nom">{{ article.nom }}</div>
-    <div class="titre">{{ article.titre }}</div>
-    <div class="resume">{{ article.resume }}</div>
+    <div class="nom spacer-up">{{ article.nom | uppercase }}</div>
+    <div class="titre spacer-up">{{ article.titre }}</div>
+    <div class="resume spacer-up">{{ article.resume }}</div>
+    <div class="spacer-up offset-md-2 col-md-8 col-s-12 section-container" #sectionCard>
+        <mat-card class="section mat-elevation-z8" >
+            <div  *ngFor="let section of article.sections; index as i" class="spacer-up">
+                <mat-card-header *ngIf="section.titre">
+                    <mat-card-title class="section-titre">{{ section.titre }}</mat-card-title>
+                </mat-card-header>
+                <mat-card-content  *ngIf="section.textAvant" class="section-text-avant" [innerHTML]="section.textAvant"></mat-card-content>
+                <div *ngIf="section.photo">
+                    <img class="section-photo" [src]="'data:' + section.photoContentType + ';base64,' + section.photo" alt="photo de la section"/>
+                </div>
+                <div *ngIf="section.idVideo">
+                    <iframe width="100%" [height]="getVideoHeight()" [src]="getVideoUrl(i)"></iframe>
+                </div>
+                <mat-card-content *ngIf="section.textApres" class="section-text-apres" [innerHTML]="section.textApres"></mat-card-content>
+            </div>
+        </mat-card>
+    </div>
 
     <h2><span jhiTranslate="shanaApp.article.detail.title">Article</span> {{article.id}}</h2>
     <hr>

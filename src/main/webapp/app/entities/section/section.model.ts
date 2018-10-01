@@ -7,6 +7,7 @@ export class Section implements BaseEntity {
         public textAvant?: string,
         public textApres?: string,
         public idPhoto?: string,
+        public idVideo?: string,
         public photoContentType?: string,
         public photo?: any,
         public articleId?: number,

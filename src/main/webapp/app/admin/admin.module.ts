@@ -27,8 +27,10 @@ import {
     LogsService,
     UserResolvePagingParams,
     UserResolve,
-    UserModalService
+    UserModalService,
+    SettingsService
 } from './';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
     imports: [
@@ -45,6 +47,7 @@ import {
         UserMgmtDialogComponent,
         UserMgmtDeleteDialogComponent,
         LogsComponent,
+        SettingsComponent,
         JhiConfigurationComponent,
         JhiHealthCheckComponent,
         JhiHealthModalComponent,
@@ -64,6 +67,7 @@ import {
         JhiHealthService,
         JhiMetricsService,
         LogsService,
+        SettingsService,
         UserResolvePagingParams,
         UserResolve,
         UserModalService

@@ -24,6 +24,8 @@ public class SectionDTO implements Serializable {
 
     private String idPhoto;
 
+    private String idVideo;
+
     @Lob
     private byte[] photo;
     private String photoContentType;
@@ -72,7 +74,15 @@ public class SectionDTO implements Serializable {
         this.idPhoto = idPhoto;
     }
 
-    public byte[] getPhoto() {
+    public String getIdVideo() {
+		return idVideo;
+	}
+
+	public void setIdVideo(String idVideo) {
+		this.idVideo = idVideo;
+	}
+
+	public byte[] getPhoto() {
         return photo;
     }
 
@@ -133,6 +143,7 @@ public class SectionDTO implements Serializable {
             ", textAvant='" + getTextAvant() + "'" +
             ", textApres='" + getTextApres() + "'" +
             ", idPhoto='" + getIdPhoto() + "'" +
+            ", idVideo='" + getIdVideo() + "'" +
             ", photo='" + getPhoto() + "'" +
             "}";
     }

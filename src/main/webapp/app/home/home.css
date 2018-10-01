@@ -1,4 +1,38 @@
 /* ==========================================================================
+iccorp style
+========================================================================== */
+.article-image {
+    width: 100%;
+}
+.article-card {
+    margin: 0px;
+    padding: 0px;
+    border: 1px solid black;
+}
+.article-desc-left {
+    text-align: left;
+}
+.article-desc-rigth {
+    text-align: right;
+}
+.article-desc-rigth {
+    text-align: center;
+}
+.nom-desc {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 3em;
+    text-decoration: underline;
+}
+.titre-desc {
+    font-family: 'Playfair Display', serif;
+    font-size: 6em;
+}
+.resume-desc {
+    font-family: 'Great Vibes', serif;
+    font-size: 3em;
+}
+
+/* ==========================================================================
 Main page styles
 ========================================================================== */
 

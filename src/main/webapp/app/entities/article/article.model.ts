@@ -8,6 +8,7 @@ export class Article implements BaseEntity {
         public photo?: any,
         public idPhoto?: any,
         public titre?: string,
+        public resume?: string,
         public position?: number,
         public positionDansCategorie?: number,
         public dateCreation?: any,

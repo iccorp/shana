@@ -19,6 +19,7 @@
             "idPhoto": "Id Photo",
             "photo": "Photo",
             "titre": "Titre",
+            "resume": "Résumé",
             "position": "Position",
             "positionDansCategorie": "Position Dans Categorie",
             "dateCreation": "Date Creation",

@@ -1,34 +1,14 @@
 <div>
     <div>{{titre}}</div>
-    <div class="photoContainer">
-        <mat-tab-group dynamicHeight>
+    <div class="photoContainer spacer-up">
+        <div *ngIf="activateVideoPicker; then afficherPhotoAvecVideoSelector else afficherPhotoSansVideoSelector"></div>
+        <mat-tab-group class="spacer-up" dynamicHeight>
             <mat-tab label=" Photo existante">
-                <div class="photo-existante-content">
-                    <ng-template #noPhotoSelectionne>
-                        <div class="selected-photo-label">Aucune photo sélectionnée</div>
-                    </ng-template>
-                    <ng-template #photoSelectionne>
-                        <div class="selected-photo-label">
-                            <span>Photo sélectionnée</span>
-                            <span class="text-danger clearfix clear-photo">
-                                    <button type="button" 
-                                        (click)="clearInputImage('photo', 'photoContentType', 'file_photo')" 
-                                        class="btn btn-secondary btn-xs">
-                                        <span class="fa fa-times"></span>
-                                    </button>
-                            </span>
-                        </div>
-                        <div class="selected-photo">
-                            <img [src]="'data:' + selectedPhoto.photoContentType + ';base64,' + selectedPhoto.photo" 
-                                class="vignette-selected mat-elevation-z4"
-                                alt="photo image"/>
-                        </div>
-                    </ng-template>
-                    <div *ngIf="selectedPhoto.photo; then photoSelectionne else noPhotoSelectionne"></div>
+                <div class="photo-existante-content spacer-up">
                     <mat-card class="vignette-container">
                         <mat-grid-list cols="5" rowHeight="6:5">
                             <mat-grid-tile *ngFor="let vignette of vignettes" 
-                                (click)="selectedPhoto = vignette; outputPhoto()">
+                                (click)="updateSelectedPhoto(vignette)">
                                 <img *ngIf="vignette.photo" 
                                     [src]="'data:' + vignette.photoContentType + ';base64,' + vignette.photo" 
                                     class="vignette"
@@ -39,8 +19,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="Nouvelle Photo">
-                <div class="nouvelle-photo-content">
-                    <div *ngIf="selectedPhoto.photo; then photoSelectionne else noPhotoSelectionne"></div>
+                <div class="nouvelle-photo-content spacer-up">
                     <div class="select-nouvelle-photo">
                         <input type="file" 
                             id="file_photo" 
@@ -60,6 +39,74 @@
                     </div>
                 </div>
             </mat-tab>
+            <mat-tab label="Nouvelle video" *ngIf="activateVideoPicker">
+                <div class="nouvelle-video-content spacer-up">
+                    <div class="form-group">
+                        <label for="link-video">Lien video youtube: </label>
+                        <div class="input-group">
+                            <input type="text" 
+                                class="form-control" 
+                                placeholder="lien" 
+                                id="link-video" 
+                                name="link-video" 
+                                [(ngModel)]="videoLinkInput"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" 
+                                    type="button" 
+                                    (click)="updateVideoLink()">Valider</button>
+                            </span>
+                        </div>
+                    </button>
+                    </div>
+            </mat-tab>
         </mat-tab-group>
     </div>
+    <ng-template #afficherPhotoSansVideoSelector>
+        <div *ngIf="selectedPhoto.photo; then photoSelectionne else noPhotoSelectionne"></div>
+    </ng-template>
+    <ng-template #afficherPhotoAvecVideoSelector>
+        <div *ngIf="isInputVideoLinkValid(); then videoSelectionnee"></div>
+        <div *ngIf="!isInputVideoLinkValid() && selectedPhoto.photo; then photoSelectionne"></div>
+        <div *ngIf="!isInputVideoLinkValid() && !selectedPhoto.photo; then noPhotoSelectionnee"></div>
+    </ng-template>
+    <ng-template #noPhotoSelectionne>
+        <div class="selected-photo-label">Aucune photo sélectionnée</div>
+    </ng-template>
+    <ng-template #noVideoSelectionnee>
+        <div class="selected-video-label">Aucune vidéo sélectionnée</div>
+    </ng-template>
+    <ng-template #photoSelectionne>
+        <div class="selected-photo-label">
+            <span>Photo sélectionnée</span>
+            <span class="text-danger clearfix clear-photo">
+                    <button type="button" 
+                        (click)="clearInputImage('photo', 'photoContentType', 'file_photo')" 
+                        class="btn btn-secondary btn-xs">
+                        <span class="fa fa-times"></span>
+                    </button>
+            </span>
+        </div>
+        <div class="selected-photo">
+            <img [src]="'data:' + selectedPhoto.photoContentType + ';base64,' + selectedPhoto.photo" 
+                class="vignette-selected mat-elevation-z4"
+                alt="photo image"/>
+        </div>
+    </ng-template>
+    <ng-template #videoSelectionnee>
+        <div class="selected-video-label">
+            <span>Video sélectionnée</span>
+            <span class="text-danger clearfix clear-video">
+                    <button type="button" 
+                        (click)="clearVideoInput()" 
+                        class="btn btn-secondary btn-xs">
+                        <span class="fa fa-times"></span>
+                    </button>
+            </span>
+        </div>
+        <div class="selected-video">
+            <img [src]="getFinalVideoLink()" 
+                class="vignette-selected mat-elevation-z4"
+                alt="video image"/>
+        </div>
+    </ng-template>
 </div>
