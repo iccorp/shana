@@ -46,10 +46,16 @@
             </div>
             </ng-template>
             <ng-template #articleDesc>
-                <div class="article-card article-desc-center">
+                <div [ngClass]="{
+                        'desc-container': true,
+                        'article-card article-desc-center': !isDesktop(),
+                        'article-card article-desc-left': isDesktop() && e%2 === 0,
+                        'article-card article-desc-rigth': isDesktop() && e%2 === 1
+                    }">
                     <div *ngIf="article.nom" class="nom-desc">{{ article.nom | uppercase}}</div>
-                    <div *ngIf="article.titre" class="article-desc">{{ article.titre }}</div>
+                    <div *ngIf="article.titre" class="titre-desc">{{ article.titre }}</div>
                     <div *ngIf="article.resume" class="resume-desc">{{ article.resume }}</div>
+                    <div class="btn btn-primary btn-desc">Voir</div>
                 </div>
                 </ng-template>
     </ng-template>

@@ -15,23 +15,40 @@ iccorp style
 .article-desc-rigth {
     text-align: right;
 }
-.article-desc-rigth {
+.article-desc-center {
     text-align: center;
 }
 .nom-desc {
     font-family: 'Open Sans Condensed', sans-serif;
-    font-size: 3em;
+    font-size: 2em;
     text-decoration: underline;
 }
 .titre-desc {
     font-family: 'Playfair Display', serif;
-    font-size: 6em;
+    font-size: 3em;
 }
 .resume-desc {
     font-family: 'Great Vibes', serif;
     font-size: 3em;
+    margin-top: 2em;
 }
 
+.desc-container {
+    padding: 1.5em;
+}
+
+.btn-desc {
+    color:  black;
+    background-color: white;
+    border: 1px solid black;
+    min-width: 30px;
+    cursor: pointer;
+}
+.btn-desc:hover {
+    color:  white;
+    background-color: black ;
+    border: 1px solid black;
+}
 /* ==========================================================================
 Main page styles
 ========================================================================== */

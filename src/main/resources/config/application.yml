@@ -147,7 +147,7 @@ jhipster:
 photo:
     base-directory: "D://Projets//shana//Photos"
     f-l-h-couverture: 1.8
-    f-l-h-carte: 0.5
+    f-l-h-carte: 0.8
     f-l-h-vignette: 1.2
     f-l-h-section: 1.5
     vignette-width: 200
