@@ -11,11 +11,13 @@ export class AuthExpiredInterceptor extends JhiHttpInterceptor {
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+        console.log('Intercepted 3: ' + JSON.stringify(options))
         return options;
     }
 
     responseIntercept(observable: Observable<Response>): Observable<Response> {
         return <Observable<Response>> observable.catch((error, source) => {
+            console.log('Intercepted 4: ' + JSON.stringify(error))
             if (error.status === 401) {
                 const loginService: LoginService = this.injector.get(LoginService);
                 loginService.logout();

@@ -40,7 +40,7 @@ export const articleRoute: Routes = [
         path: 'article/:id',
         component: ArticleDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: [],
             pageTitle: 'shanaApp.article.home.title'
         },
         canActivate: [UserRouteAccessService]

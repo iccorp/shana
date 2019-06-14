@@ -44,6 +44,11 @@ export class ArticleService {
             .map((res: Response) => this.convertResponse(res));
     }
 
+    findByCategory(categoryId): Observable<ResponseWrapper> {
+        return this.http.get(`${this.resourceUrl}/categorie/${categoryId}`)
+        .map((res: Response) => this.convertResponse(res));
+    }
+
     delete(id: number): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }

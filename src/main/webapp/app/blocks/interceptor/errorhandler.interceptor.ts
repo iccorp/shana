@@ -9,6 +9,7 @@ export class ErrorHandlerInterceptor extends JhiHttpInterceptor {
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+        console.log('Intercepted 6: ' + JSON.stringify(options))
         return options;
     }
 
@@ -20,6 +21,7 @@ export class ErrorHandlerInterceptor extends JhiHttpInterceptor {
                     this.eventManager.broadcast( {name: 'shanaApp.httpError', content: error});
                 }
             }
+            console.log('Intercepted 7: ' + JSON.stringify(error))
             return Observable.throw(error);
         });
     }

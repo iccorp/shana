@@ -1,5 +1,7 @@
 package fr.iccorp.shana.service.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -8,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.iccorp.shana.domain.Article;
+import fr.iccorp.shana.domain.Categorie;
 import fr.iccorp.shana.repository.ArticleRepository;
+import fr.iccorp.shana.repository.CategorieRepository;
 import fr.iccorp.shana.service.ArticleService;
 import fr.iccorp.shana.service.PhotoService;
 import fr.iccorp.shana.service.dto.ArticleDTO;
@@ -25,12 +29,15 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleRepository articleRepository;
 
+    private final CategorieRepository categorieRepository;
+
     private final ArticleMapper articleMapper;
 
     public ArticleServiceImpl(ArticleRepository articleRepository, ArticleMapper articleMapper,
-            PhotoService photoService) {
+            PhotoService photoService, CategorieRepository categorieRepository) {
         this.articleRepository = articleRepository;
         this.articleMapper = articleMapper;
+        this.categorieRepository = categorieRepository;
     }
 
     /**
@@ -90,4 +97,14 @@ public class ArticleServiceImpl implements ArticleService {
         log.debug("Request to delete Article : {}", id);
         articleRepository.delete(id);
     }
+
+	@Override
+	public List<ArticleDTO> findByCategory(Long categorieId) {
+		log.debug("Request to find Article by categorieId : {}", categorieId);
+		Categorie category = categorieRepository.findOne(categorieId);
+		log.debug("Categorie: {}", category);
+		List<Article> res = articleRepository.findByCategorie(category);
+		log.debug("Categorie: {}", res);
+		return articleMapper.toDto(res);
+	}
 }

@@ -1,10 +1,14 @@
 <div class="banniere">Shana Cosmetics</div>
+<div *ngIf="categories" class="categorie-container">
+    <span class="categorie-item" *ngFor="let categorie of categories">
+        <span [routerLink]="['/']" [queryParams]="{c: categorie.id}">
+            {{ categorie.nom | uppercase }}
+        </span>
+    </span>
+</div>
 <div *ngIf="photoCouverture" class="spacer-up spacer-down">
     <img class="photo-couverture" [src]="'data:' + photoCouverture.photoContentType + ';base64,' + photoCouverture.photo"
         alt="photo de couverture" />
-</div>
-<div class="categorie-container">
-    <span class="categorie-item" *ngFor="let categorie of categories">{{ categorie.nom | uppercase }}</span>
 </div>
 <p-dataScroller [value]="articles" [rows]="2">
     <ng-template let-article let-e="index" pTemplate="item">
@@ -39,10 +43,13 @@
         </ng-template>
         <ng-template #articleImg>
             <div class="article-card">
-                <img *ngIf="article.photo" 
-                class="article-image" 
-                [src]="'data:' + article.photoContentType + ';base64,' + article.photo"
-                alt="photo de l'article" />
+                <a [routerLink]="['/article', articles[e].id]">
+                    <img *ngIf="article.photo" 
+                    class="article-image" 
+                    [src]="'data:' + article.photoContentType + ';base64,' + article.photo"
+                    alt="photo de l'article" 
+                    />
+                </a>
             </div>
             </ng-template>
             <ng-template #articleDesc>
@@ -55,7 +62,11 @@
                     <div *ngIf="article.nom" class="nom-desc">{{ article.nom | uppercase}}</div>
                     <div *ngIf="article.titre" class="titre-desc">{{ article.titre }}</div>
                     <div *ngIf="article.resume" class="resume-desc">{{ article.resume }}</div>
-                    <div class="btn btn-primary btn-desc">Voir</div>
+                    <div [routerLink]="['/article', articles[e].id]" [ngClass]="{
+                        'btn-desc': true,
+                        'float-left': isDesktop() && e%2 === 0,
+                        'float-right': isDesktop() && e%2 === 1
+                    }">Lire</div>
                 </div>
                 </ng-template>
     </ng-template>

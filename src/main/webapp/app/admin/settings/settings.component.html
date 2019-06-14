@@ -1,0 +1,22 @@
+<h2>Paramètres</h2>
+<div class="offset-md-2 col-md-8 col-s-12">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert></jhi-alert>
+        <mat-card class="section mat-elevation-z8" >
+            <jhi-photo-picker
+                [photoInitiale]="photoCouverture"
+                [vignettes]="vignettes" 
+                [titre]="'Photo de couverture'"
+                [activateVideoPicker]="false"
+                [videoId]="''"
+                (updatePhoto)="updatePhotoCouverture($event)"></jhi-photo-picker>
+            <div>
+                <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary pointer">
+                    <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </mat-card>
+    </form>
+
+</div>

@@ -8,6 +8,7 @@ import { SettingsService } from '../admin';
 import { CategorieService, Categorie } from '../entities/categorie';
 import { Article, ArticleService } from '../entities/article';
 import { DeviceDetectorService } from 'ngx-device-detector';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'jhi-home',
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
     categories: Categorie[];
     articles: Article[];
     isPhone;
+    selectedCategoryId;
 
     constructor(
         private deviceService: DeviceDetectorService,
@@ -34,12 +36,17 @@ export class HomeComponent implements OnInit {
         private settingsService: SettingsService,
         private articleService: ArticleService,
         private categorieService: CategorieService,
+        private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
         this.principal.identity().then((account) => {
             this.account = account;
+        });
+        this.route.queryParams.subscribe((queryParams) => {
+            this.selectedCategoryId = queryParams['c'];
+            this.loadArticles();
         });
         this.registerAuthenticationSuccess();
         this.loadPhotoCouverture();
@@ -70,22 +77,33 @@ export class HomeComponent implements OnInit {
     }
 
     loadArticles() {
-        this.articleService.query()
-        .subscribe((articles) => {
-            this.articles = articles.json;
-            this.articles.forEach((article: Article) => {
-                if (article.idPhoto) {
-                    const photoParam: Photo = new Photo();
-                    photoParam.idPhoto = article.idPhoto;
-                    photoParam.format = FORMAT_PHOTO.CARTE;
-                    this.photoService.findByPhoto(photoParam)
-                    .subscribe((photo: Photo) => {
-                        article.photo = photo.photo;
-                        article.photoContentType = photo.photoContentType;
-                    });
-                }
-            });
-        })
+        if (this.selectedCategoryId) {
+            this.articleService.findByCategory(this.selectedCategoryId)
+            .subscribe((articles) => {
+                this.handleArticles(articles.json);
+            })
+        } else {
+            this.articleService.query()
+            .subscribe((articles) => {
+                this.handleArticles(articles.json);
+            })
+        }
+    }
+
+    handleArticles(articles: Array<Article>) {
+        this.articles = articles;
+        this.articles.forEach((article: Article) => {
+            if (article.idPhoto) {
+                const photoParam: Photo = new Photo();
+                photoParam.idPhoto = article.idPhoto;
+                photoParam.format = FORMAT_PHOTO.CARTE;
+                this.photoService.findByPhoto(photoParam)
+                .subscribe((photo: Photo) => {
+                    article.photo = photo.photo;
+                    article.photoContentType = photo.photoContentType;
+                });
+            }
+        });
     }
 
     registerAuthenticationSuccess() {
@@ -108,4 +126,18 @@ export class HomeComponent implements OnInit {
         return this.deviceService.isDesktop();
     }
 
+    /* categorieOffset() {
+        if (this.isDesktop()) {
+            const i = Math.floor(6 - this.categories.length / 2);
+            if (this.categories.length < 12 && i > 0) {
+                return 'ui-g-offset-' + i;
+            }
+        } else {
+            const i = Math.floor(6 - this.categories.length);
+            if (this.categories.length < 6 && i > 0) {
+                return 'ui-g-offset-' + i;
+            }
+        }
+        return '';
+    } */
 }

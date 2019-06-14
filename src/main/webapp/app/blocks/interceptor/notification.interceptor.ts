@@ -14,6 +14,7 @@ export class NotificationInterceptor extends JhiHttpInterceptor {
     }
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
+        console.log('Intercepted 5: ' + JSON.stringify(options))
         return options;
     }
 

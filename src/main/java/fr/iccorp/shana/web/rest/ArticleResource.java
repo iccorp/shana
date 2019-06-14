@@ -102,6 +102,20 @@ public class ArticleResource {
     }
 
     /**
+     * GET  /articles : get all the articles by category.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of articles in body
+     */
+    @GetMapping("/articles/categorie/{category}")
+    @Timed
+    public ResponseEntity<List<ArticleDTO>> getArticlesByCategory(@PathVariable Long category) {
+    	log.debug("REST request to get a page of Articles by category {}", category);
+    	List<ArticleDTO> res = articleService.findByCategory(category);
+    	return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    /**
      * GET  /articles/:id : get the "id" article.
      *
      * @param id the id of the articleDTO to retrieve

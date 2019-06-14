@@ -15,13 +15,15 @@ export class AuthInterceptor extends JhiHttpInterceptor {
 
     requestIntercept(options?: RequestOptionsArgs): RequestOptionsArgs {
         if (!options || !options.url || (/^http/.test(options.url) && !(SERVER_API_URL && options.url.startsWith(SERVER_API_URL)))) {
-            return options;
+           console.log('Intercepted 1: ' + JSON.stringify(options))
+           return options;
         }
 
         const token = this.localStorage.retrieve('authenticationToken') || this.sessionStorage.retrieve('authenticationToken');
         if (!!token) {
             options.headers.append('Authorization', 'Bearer ' + token);
         }
+        console.log('Intercepted 2: ' + JSON.stringify(options) + ' token: ' + token)
         return options;
     }
 
